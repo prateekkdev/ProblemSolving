@@ -11,12 +11,11 @@ public class ProplemSolving {
      */
     public static void main(String[] args) {
 
-        int[] arr = new int[]{1, 5, 7, 1, 5, 6};
+        int[] arr = new int[]{5, 4, 3, 0, 2, 1};
 
         displayArr(arr);
 
-        // insertionSort(arr);
-        merge(arr, 0, 3, 5);
+        mergeSort(arr);
 
         displayArr(arr);
     }
@@ -49,23 +48,40 @@ public class ProplemSolving {
         swapArr[indexFinal] = original;
     }
 
+    public static void mergeSort(int[] arr) {
+
+        splitAndMerge(arr, 0, arr.length - 1);
+
+    }
+
+    // 2, 4, 3, 5, 7
+    public static void splitAndMerge(int[] arr, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+
+            splitAndMerge(arr, left, mid);
+            splitAndMerge(arr, mid + 1, right);
+            merge(arr, left, mid, right);
+        }
+    }
+
     public static void merge(int[] arr, int left, int mid, int right) {
 
-        int[] leftArr = new int[mid - left];
+        int[] leftArr = new int[mid - left + 1];
         for (int index = 0; index < leftArr.length; index++) {
             leftArr[index] = arr[index + left];
         }
 
-        int[] rightArr = new int[right - mid + 1];
+        int[] rightArr = new int[right - mid];
         for (int index = 0; index < rightArr.length; index++) {
-            rightArr[index] = arr[mid + index];
+            rightArr[index] = arr[mid + index + 1];
         }
 
         int leftCount = 0, rightCount = 0, mainCount = left;
         while (leftCount < leftArr.length && rightCount < rightArr.length) {
             if (leftArr[leftCount] <= rightArr[rightCount]) {
                 arr[mainCount++] = leftArr[leftCount++];
-            } else if (leftArr[leftCount] > rightArr[rightCount]) {
+            } else {
                 arr[mainCount++] = rightArr[rightCount++];
             }
         }
@@ -80,7 +96,7 @@ public class ProplemSolving {
     }
 
     /**
-     * Max-heapify
+     * Max-Heapify
      *
      * @param arr
      * @param sortedIndex
