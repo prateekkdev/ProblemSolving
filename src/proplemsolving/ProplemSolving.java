@@ -15,7 +15,7 @@ public class ProplemSolving {
 
         displayArr(arr);
 
-        quickSort(arr);
+        quickSort(arr, 0, arr.length -1);
 
         displayArr(arr);
     }
@@ -30,12 +30,46 @@ public class ProplemSolving {
      *
      */
     public static void quickSort(int[] arr) {
+        quickSort(arr, 0, arr.length - 1);
+    }
 
-        partition(arr, 0, arr.length - 1);
+    public static void quickSort(int[] arr, int start, int end) {
+
+        if (start < end) {
+            int pivot = partition(arr, start, end);
+            quickSort(arr, start, pivot - 1);
+            quickSort(arr, pivot + 1, end);
+        }
+    }
+
+    public static int partition(int[] arr, int start, int end) {
+
+        int pivot = end;
+        int smallerIndex = start - 1;
+
+        // end-1 because end is pivot itself.
+        for (int count = start; count <= end - 1; count++) {
+
+            if (arr[count] <= arr[pivot]) {
+                smallerIndex++;
+                swap(smallerIndex, count, arr);
+            }
+        }
+
+        // Swap pivot with correct positon index, as some element is smaller than pivot
+        // smallerIndex++;
+        swap(smallerIndex + 1, end, arr);
+
+        return smallerIndex + 1;
+    }
+
+    public static void quickSort1(int[] arr) {
+
+        partition1(arr, 0, arr.length - 1);
 
     }
 
-    public static void partition(int[] arr, int start, int end) {
+    public static void partition1(int[] arr, int start, int end) {
         if (start >= end) {
             return;
         }
@@ -59,8 +93,8 @@ public class ProplemSolving {
             swap(smallerIndex, end, arr);
         }
 
-        partition(arr, start, smallerIndex);
-        partition(arr, smallerIndex + 2, end);
+        partition1(arr, start, smallerIndex);
+        partition1(arr, smallerIndex + 2, end);
 
     }
 
