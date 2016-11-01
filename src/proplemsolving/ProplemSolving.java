@@ -11,41 +11,143 @@ public class ProplemSolving {
      */
     public static void main(String[] args) {
 
-        int[] arr = new int[]{5, 4, 3, 0, 2, 1};
+        int[] arr = new int[]{10, 20, 5, 30, 2, 60};
 
         displayArr(arr);
 
-        mergeSort(arr);
+        descendingHeapSort(arr);
 
         displayArr(arr);
+
+        System.out.println("2nd Smallest: " + kthSmallest(arr, 2));
     }
 
-    public static void displayArr(int[] arr) {
-
-        System.out.print("\nArr: [");
-        for (int count = 0; count < arr.length; count++) {
-            System.out.print(arr[count]);
-            if (count != arr.length - 1) {
-                System.out.print(", ");
-            }
+    public static int kthSmallest(int[] arr, int k) {
+        if (k > arr.length || k < 1) {
+            return -1;
         }
 
-        System.out.print("]\n");
+        // First make the heap
+        for (int index = arr.length / 2; index >= 0; index--) {
+            minHeapify(arr, index, arr.length - 1);
+        }
+
+        for (int index = arr.length - 1; index >= arr.length - k; index--) {
+            swap(0, index, arr);
+            minHeapify(arr, 0, index - 1);
+        }
+
+        return arr[arr.length - k];
+    }
+
+    public static void descendingHeapSort(int[] arr) {
+
+        // First make the heap
+        for (int index = arr.length / 2; index >= 0; index--) {
+            minHeapify(arr, index, arr.length - 1);
+        }
+
+        for (int index = arr.length - 1; index > 0; index--) {
+            swap(0, index, arr);
+            minHeapify(arr, 0, index - 1);
+        }
+    }
+
+    public static void minHeapify(int[] arr, int rootIndex, int lastIndex) {
+
+        int smallest = rootIndex;
+        int leftChild = getLeftChild(arr, rootIndex, lastIndex);
+        int rightChild = getRightChild(arr, rootIndex, lastIndex);
+
+        if (leftChild != -1 && arr[smallest] > arr[leftChild]) {
+            smallest = leftChild;
+        }
+
+        if (rightChild != -1 && arr[smallest] > arr[rightChild]) {
+            smallest = rightChild;
+        }
+
+        if (smallest != rootIndex) {
+            swap(smallest, rootIndex, arr);
+            minHeapify(arr, smallest, lastIndex);
+        }
+    }
+
+    public static int kthLargest(int[] arr, int k) {
+        if (k > arr.length || k < 1) {
+            return -1;
+        }
+
+        // First make the heap
+        for (int index = arr.length / 2; index >= 0; index--) {
+            maxHeapify(arr, index, arr.length - 1);
+        }
+
+        for (int index = arr.length - 1; index >= arr.length - k; index--) {
+            swap(0, index, arr);
+            maxHeapify(arr, 0, index - 1);
+        }
+
+        return arr[arr.length - k];
+    }
+
+    public static void ascendingHeapSort(int[] arr) {
+
+        // First make the heap
+        for (int index = arr.length / 2; index >= 0; index--) {
+            maxHeapify(arr, index, arr.length - 1);
+        }
+
+        for (int index = arr.length - 1; index > 0; index--) {
+            swap(0, index, arr);
+            maxHeapify(arr, 0, index - 1);
+        }
     }
 
     /**
-     ************* Sorting ***************
+     * Max-Heapify
      *
-     * Adaptive vs Non-Adaptive: Adaptive sort takes advantage of presortedness
-     * in its account. Stable vs Unstable: Stable sort maintains the sequence of
-     * similar elements. Inplace vs Not inplace: Inplace sort don't use any
-     * extra space(Eg. Bubble Sort)
-     *
+     * @param arr
+     * @param sortedIndex
      */
-    public static void swap(int indexOriginal, int indexFinal, int[] swapArr) {
-        int original = swapArr[indexOriginal];
-        swapArr[indexOriginal] = swapArr[indexFinal];
-        swapArr[indexFinal] = original;
+    public static void maxHeapify(int[] arr, int rootIndex, int lastIndex) {
+
+        int largest = rootIndex;
+        int leftChild = getLeftChild(arr, rootIndex, lastIndex);
+        int rightChild = getRightChild(arr, rootIndex, lastIndex);
+
+        if (leftChild != -1 && arr[largest] < arr[leftChild]) {
+            largest = leftChild;
+        }
+
+        if (rightChild != -1 && arr[largest] < arr[rightChild]) {
+            largest = rightChild;
+        }
+
+        if (largest != rootIndex) {
+            swap(largest, rootIndex, arr);
+            maxHeapify(arr, largest, lastIndex);
+        }
+    }
+
+    public static int getLeftChild(int[] arr, int rootIndex, int lastIndex) {
+        int leftChildIndex = 2 * rootIndex + 1;
+
+        if (leftChildIndex <= lastIndex) {
+            return leftChildIndex;
+        } else {
+            return -1;
+        }
+    }
+
+    public static int getRightChild(int[] arr, int rootIndex, int lastIndex) {
+        int rightChildIndex = 2 * rootIndex + 2;
+
+        if (rightChildIndex <= lastIndex) {
+            return rightChildIndex;
+        } else {
+            return -1;
+        }
     }
 
     public static void mergeSort(int[] arr) {
@@ -93,20 +195,6 @@ public class ProplemSolving {
         while (rightCount < rightArr.length) {
             arr[mainCount++] = rightArr[rightCount++];
         }
-    }
-
-    /**
-     * Max-Heapify
-     *
-     * @param arr
-     * @param sortedIndex
-     */
-    public static void heapify(int[] arr, int sortedIndex) {
-
-    }
-
-    public static void heapSort(int[] arr) {
-
     }
 
     /**
@@ -177,4 +265,33 @@ public class ProplemSolving {
             swap(sortedIndex, minIndex, arr);
         }
     }
+
+    public static void displayArr(int[] arr) {
+
+        System.out.print("\nArr: [");
+        for (int count = 0; count < arr.length; count++) {
+            System.out.print(arr[count]);
+            if (count != arr.length - 1) {
+                System.out.print(", ");
+            }
+        }
+
+        System.out.print("]\n");
+    }
+
+    /**
+     ************* Sorting ***************
+     *
+     * Adaptive vs Non-Adaptive: Adaptive sort takes advantage of presortedness
+     * in its account. Stable vs Unstable: Stable sort maintains the sequence of
+     * similar elements. Inplace vs Not inplace: Inplace sort don't use any
+     * extra space(Eg. Bubble Sort)
+     *
+     */
+    public static void swap(int indexOriginal, int indexFinal, int[] swapArr) {
+        int original = swapArr[indexOriginal];
+        swapArr[indexOriginal] = swapArr[indexFinal];
+        swapArr[indexFinal] = original;
+    }
+
 }
