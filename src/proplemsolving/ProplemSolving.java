@@ -11,15 +11,57 @@ public class ProplemSolving {
      */
     public static void main(String[] args) {
 
-        int[] arr = new int[]{10, 20, 5, 30, 2, 60};
+        int[] arr = new int[]{10, 5, 3, 6, 7};
 
         displayArr(arr);
 
-        descendingHeapSort(arr);
+        quickSort(arr);
 
         displayArr(arr);
+    }
 
-        System.out.println("2nd Smallest: " + kthSmallest(arr, 2));
+    /**
+     ************* Sorting ***************
+     *
+     * Adaptive vs Non-Adaptive: Adaptive sort takes advantage of presortedness
+     * in its account. Stable vs Unstable: Stable sort maintains the sequence of
+     * similar elements. Inplace vs Not inplace: Inplace sort don't use any
+     * extra space(Eg. Bubble Sort)
+     *
+     */
+    public static void quickSort(int[] arr) {
+
+        partition(arr, 0, arr.length - 1);
+
+    }
+
+    public static void partition(int[] arr, int start, int end) {
+        if (start >= end) {
+            return;
+        }
+
+        int pivot = end;
+        int smallerIndex = -1;
+
+        // end-1 because end is pivot itself.
+        for (int count = start; count < end - 1; count++) {
+
+            if (arr[count] < arr[pivot]) {
+                smallerIndex++;
+                swap(count, pivot, arr);
+            }
+
+        }
+
+        // Swap pivot with correct positon index, as some element is smaller than pivot
+        smallerIndex++;
+        if (arr[pivot] <= arr[smallerIndex]) {
+            swap(smallerIndex, end, arr);
+        }
+
+        partition(arr, start, smallerIndex);
+        partition(arr, smallerIndex + 2, end);
+
     }
 
     public static int kthSmallest(int[] arr, int k) {
@@ -279,19 +321,9 @@ public class ProplemSolving {
         System.out.print("]\n");
     }
 
-    /**
-     ************* Sorting ***************
-     *
-     * Adaptive vs Non-Adaptive: Adaptive sort takes advantage of presortedness
-     * in its account. Stable vs Unstable: Stable sort maintains the sequence of
-     * similar elements. Inplace vs Not inplace: Inplace sort don't use any
-     * extra space(Eg. Bubble Sort)
-     *
-     */
     public static void swap(int indexOriginal, int indexFinal, int[] swapArr) {
         int original = swapArr[indexOriginal];
         swapArr[indexOriginal] = swapArr[indexFinal];
         swapArr[indexFinal] = original;
     }
-
 }
