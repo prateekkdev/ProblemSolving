@@ -11,11 +11,12 @@ public class ProplemSolving {
      */
     public static void main(String[] args) {
 
-        int[] arr = new int[]{10, 5, 3, 6, 7};
+        int[] arr = new int[]{2, 3, 4, 1, 5};
 
         displayArr(arr);
 
-        quickSort(arr, 0, arr.length -1);
+        // quickSort(arr, 0, arr.length - 1);
+        quickSort(arr);
 
         displayArr(arr);
     }
@@ -29,10 +30,6 @@ public class ProplemSolving {
      * extra space(Eg. Bubble Sort)
      *
      */
-    public static void quickSort(int[] arr) {
-        quickSort(arr, 0, arr.length - 1);
-    }
-
     public static void quickSort(int[] arr, int start, int end) {
 
         if (start < end) {
@@ -56,46 +53,39 @@ public class ProplemSolving {
             }
         }
 
-        // Swap pivot with correct positon index, as some element is smaller than pivot
-        // smallerIndex++;
+        // Swap pivot with correct positon index
+        // If no element is smaller, then swap with first index
+        // If all the elements are small(all swaps occured in above loop above), now swap with self
         swap(smallerIndex + 1, end, arr);
 
         return smallerIndex + 1;
     }
 
-    public static void quickSort1(int[] arr) {
-
-        partition1(arr, 0, arr.length - 1);
-
+    public static void quickSort(int[] arr) {
+        partitionRecursive(arr, 0, arr.length - 1);
     }
 
-    public static void partition1(int[] arr, int start, int end) {
-        if (start >= end) {
-            return;
-        }
+    public static void partitionRecursive(int[] arr, int start, int end) {
 
-        int pivot = end;
-        int smallerIndex = -1;
+        if (start < end) {
 
-        // end-1 because end is pivot itself.
-        for (int count = start; count < end - 1; count++) {
+            int pivot = end;
+            int smallerIndex = start - 1;
 
-            if (arr[count] < arr[pivot]) {
-                smallerIndex++;
-                swap(count, pivot, arr);
+            // end-1 because end is pivot itself.
+            for (int count = start; count <= end - 1; count++) {
+
+                if (arr[count] <= arr[pivot]) {
+                    smallerIndex++;
+                    swap(count, smallerIndex, arr);
+                }
             }
 
+            swap(smallerIndex + 1, end, arr);
+
+            partitionRecursive(arr, start, smallerIndex);
+            partitionRecursive(arr, smallerIndex + 2, end);
         }
-
-        // Swap pivot with correct positon index, as some element is smaller than pivot
-        smallerIndex++;
-        if (arr[pivot] <= arr[smallerIndex]) {
-            swap(smallerIndex, end, arr);
-        }
-
-        partition1(arr, start, smallerIndex);
-        partition1(arr, smallerIndex + 2, end);
-
     }
 
     public static int kthSmallest(int[] arr, int k) {
