@@ -11,12 +11,12 @@ public class ProplemSolving {
      */
     public static void main(String[] args) {
 
-        int[] arr = new int[]{2, 3, 4, 1, 5, 99, 2};
+        int[] arr = new int[]{15, 1};
 
         displayArr(arr);
 
         // quickSort(arr, 0, arr.length - 1);
-        countingSort(arr, 100);
+        countingSort(arr, 0, 30);
 
         displayArr(arr);
     }
@@ -24,7 +24,7 @@ public class ProplemSolving {
     /**
      * Count sort is an integer sorting algorithm which works on keys between a
      * given range. It is best suited for small integers set as it results into
-     * O(n+k), n being the numbers in the set and k it's range and takes O(n+k)
+     * O(n+k), n being the numbers in the set and k it's range and takes O(k)
      * additional space.
      *
      * @param arr
@@ -44,6 +44,27 @@ public class ProplemSolving {
         for (int index = 0; index < rangeArray.length; index++) {
             for (int repeatCount = 1; repeatCount <= rangeArray[index]; repeatCount++) {
                 arr[originalCount++] = index;
+            }
+        }
+    }
+
+    // Both high and low included.
+    // 15, 30, 22, 18
+    public static void countingSort(int[] arr, int low, int high) {
+
+        int range = high - low + 1;
+
+        int[] rangeArray = new int[range];
+
+        // Now increment the index in range array, when we encounter that index in original array.
+        for (int index = 0; index < arr.length; index++) {
+            rangeArray[arr[index] - low] = rangeArray[arr[index] - low] + 1;
+        }
+
+        int originalCount = 0;
+        for (int index = 0; index < rangeArray.length; index++) {
+            for (int repeatCount = 1; repeatCount <= rangeArray[index]; repeatCount++) {
+                arr[originalCount++] = index + low;
             }
         }
     }
