@@ -5,6 +5,9 @@
  */
 package proplemsolving;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  *
  * @author prateek.kesarwani
