@@ -5,9 +5,6 @@
  */
 package proplemsolving;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 /**
  *
  * @author prateek.kesarwani
@@ -21,7 +18,7 @@ public class PLinkedList {
     }
 
     /**
-     * Always inserted as first node.
+     * Inserted as first node.
      *
      * @param data
      */
@@ -73,7 +70,7 @@ public class PLinkedList {
     }
 
     public void deleteFirst() {
-        if (head.next != null) {
+        if (!isEmpty()) {
             head.next = head.next.next;
         }
     }
@@ -132,6 +129,37 @@ public class PLinkedList {
             iterator = iterator.next;
         }
         System.out.println();
+    }
+
+    public int fetchFirst() {
+
+        if (isEmpty()) {
+            return -1;
+        } else {
+            return head.next.data;
+        }
+    }
+
+    public int fetchLast() {
+        Node iterator = head.next;
+
+        if (iterator != null) {
+            while (iterator.next != null) {
+                iterator = iterator.next;
+            }
+
+            return iterator.data;
+        } else {
+            return -1;
+        }
+    }
+
+    public boolean isEmpty() {
+        if (head.next == null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private class Node {

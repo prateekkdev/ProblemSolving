@@ -16,20 +16,6 @@ public class ProplemSolving {
      */
     public static void main(String[] args) {
 
-        PLinkedList linkedList = new PLinkedList();
-        linkedList.insert(20);
-
-        linkedList.insert(10);
-
-        linkedList.deleteAt(2);
-
-        linkedList.traverse();
-
-        linkedList.insertAt(2, 20);
-        linkedList.insertLast(30);
-
-        linkedList.traverse();
-
     }
 
     private static void checkFib() {

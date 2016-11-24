@@ -16,6 +16,49 @@ import java.util.Scanner;
  */
 public class Problems {
 
+    // Merge two sorted arrays
+    // Complexity is O(m+n)
+    public static int[] mergeTwoSortedArrays(int[] arr1, int[] arr2) {
+
+        int[] arrResult = new int[arr1.length + arr2.length];
+
+        int counter1 = 0;
+        int counter2 = 0;
+        int counterResult = 0;
+
+        while (counter1 != arr1.length && counter2 != arr2.length) {
+            if (arr1[counter1] <= arr2[counter2]) {
+                arrResult[counterResult++] = arr1[counter1];
+                counter1++;
+            } else {
+                arrResult[counterResult++] = arr2[counter2];
+                counter2++;
+            }
+        }
+
+        while (counter1 < arr1.length) {
+            arrResult[counterResult++] = arr1[counter1];
+            counter1++;
+        }
+
+        while (counter2 < arr2.length) {
+            arrResult[counterResult++] = arr2[counter2];
+            counter2++;
+        }
+
+        return arrResult;
+    }
+
+    // Merge K sorted Arrays
+    /*
+    public static int[] mergeKSortedArrays(int[]...) {
+
+        
+        
+        return null;
+    }
+    */
+
     public static void countIntegers() {
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
@@ -92,12 +135,12 @@ public class Problems {
             return value;
         }
     }
-    
+
     /**
      * https://www.hackerrank.com/challenges/countingsort4
-     * @param args 
+     *
+     * @param args
      */
-
     public static void countingFull(String[] args) {
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
@@ -139,13 +182,14 @@ public class Problems {
         }
 
         /**
-        * Using StringBuilder saved a lot of time(as mutable, so can append, 
-        * rather than creating objects everytime), when handling with lot of results. 
-        * And printing in console after finish saved timeout(timeout is 3s)
-        */
+         * Using StringBuilder saved a lot of time(as mutable, so can append,
+         * rather than creating objects everytime), when handling with lot of
+         * results. And printing in console after finish saved timeout(timeout
+         * is 3s)
+         */
         StringBuilder resultString = new StringBuilder();
-        for(int index = 0; index < result.length; index++) {
-            resultString.append(result[index]+ " ");
+        for (int index = 0; index < result.length; index++) {
+            resultString.append(result[index] + " ");
         }
         System.out.print(resultString);
     }
