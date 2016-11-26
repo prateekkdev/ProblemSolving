@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package proplemsolving;
+package type.generic;
 
 /**
  *
  * @author prateek.kesarwani
  */
-public class PQueue {
+public class PQueue<T> {
 
     final private PLinkedList mLinkedList;
 
@@ -17,18 +17,18 @@ public class PQueue {
         mLinkedList = new PLinkedList();
     }
 
-    public void enqueue(int data) {
+    public void enqueue(T data) {
         mLinkedList.insertLast(data);
     }
 
-    public int dequeue() {
-        int data = mLinkedList.fetchFirst();
+    public T dequeue() {
+        T data = (T) mLinkedList.fetchFirst();
         mLinkedList.deleteFirst();
         return data;
     }
 
-    public int peek() {
-        return mLinkedList.fetchFirst();
+    public T peek() {
+        return (T) mLinkedList.fetchFirst();
     }
 
     public void display() {

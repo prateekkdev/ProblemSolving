@@ -5,6 +5,8 @@
  */
 package proplemsolving;
 
+import type.generic.*;
+
 /**
  *
  * @author prateek.kesarwani
@@ -32,12 +34,15 @@ public class PBinarySearchTree {
         }
 
         return root;
-
     }
 
-    // Insert using loop
     public void insert(int data) {
 
+        // This is recursive approach
+        root = insert(root, data);
+
+        // This is iterative one
+        /*
         Node newNode = new Node(data);
         if (root == null) {
             root = newNode;
@@ -57,15 +62,7 @@ public class PBinarySearchTree {
         } else {
             parent.rightChild = newNode;
         }
-    }
-
-    int minValue(Node root) {
-        int minv = root.data;
-        while (root.leftChild != null) {
-            minv = root.leftChild.data;
-            root = root.leftChild;
-        }
-        return minv;
+         */
     }
 
     public Node delete(Node root, int data) {
@@ -79,8 +76,7 @@ public class PBinarySearchTree {
         } else if (data > root.data) {
             root.rightChild = delete(root.rightChild, data);
         } else // Found the key, so delete it
-        {
-            if (root.leftChild == null) {
+         if (root.leftChild == null) {
                 return root.rightChild;
             } else if (root.rightChild == null) {
                 return root.leftChild;
@@ -90,7 +86,6 @@ public class PBinarySearchTree {
 
                 root.rightChild = delete(root.rightChild, root.data);
             }
-        }
 
         return root;
     }
@@ -131,6 +126,30 @@ public class PBinarySearchTree {
 
         // Value is in root
         return root;
+    }
+
+    /**
+     * Tree Traversals
+     *
+     * i) BFS or Level Order(Queue could be applied), ii) DFS(Stack could be
+     * used, only essential in Graphs though) - Could be preorder, inorder,
+     * postorder
+     */
+    public void traverseLevelorder() {
+        PQueue queue = new PQueue();
+        queue.enqueue(root);
+        while (!queue.isEmpty()) {
+            Node node = (Node) queue.dequeue();
+            System.out.print(node.data + ", ");
+
+            if (node.leftChild != null) {
+                queue.enqueue(node.leftChild);
+            }
+
+            if (node.rightChild != null) {
+                queue.enqueue(node.rightChild);
+            }
+        }
     }
 
     public void traversePreorder() {

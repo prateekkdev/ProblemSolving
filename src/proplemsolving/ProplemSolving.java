@@ -27,16 +27,9 @@ public class ProplemSolving {
 
         tree.traverseInorder();
         System.out.println();
-        
-        // PBinarySearchTree.Node node = tree.search(tree.root, 70);
-        
-        tree.delete(40);
-        tree.traverseInorder();
-        System.out.println();
 
-        // tree.traversePreorder();
-        // System.out.println();
-        // tree.traversePostorder();
+        tree.traverseLevelorder();
+        System.out.println();
     }
 
     private static void checkFib() {
