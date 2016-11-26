@@ -1,9 +1,6 @@
 package proplemsolving;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  *
@@ -15,7 +12,31 @@ public class ProplemSolving {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        checkBST();
+    }
 
+    private static void checkBST() {
+        PBinarySearchTree tree = new PBinarySearchTree();
+        tree.insert(40);
+        tree.insert(20);
+        tree.insert(10);
+        tree.insert(30);
+        tree.insert(60);
+        tree.insert(50);
+        tree.insert(70);
+
+        tree.traverseInorder();
+        System.out.println();
+        
+        // PBinarySearchTree.Node node = tree.search(tree.root, 70);
+        
+        tree.delete(40);
+        tree.traverseInorder();
+        System.out.println();
+
+        // tree.traversePreorder();
+        // System.out.println();
+        // tree.traversePostorder();
     }
 
     private static void checkFib() {
