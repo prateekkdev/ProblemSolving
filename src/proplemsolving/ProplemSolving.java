@@ -19,17 +19,34 @@ public class ProplemSolving {
         PBinarySearchTree tree = new PBinarySearchTree();
         tree.insert(40);
         tree.insert(20);
-        tree.insert(10);
-        tree.insert(30);
         tree.insert(60);
         tree.insert(50);
-        tree.insert(70);
+        tree.insert(65);
+        tree.insert(52);
+        tree.insert(62);
+        tree.insert(68);
+        tree.insert(53);
+        tree.insert(54);
+        tree.insert(55);
 
         tree.traverseInorder();
         System.out.println();
 
         tree.traverseLevelorder();
         System.out.println();
+
+        int lca = tree.lowestCommonAncester(30, 30);
+        System.out.println("LCA: " + lca);
+
+        System.out.println("Tree Height: " + tree.treeHeight());
+
+        System.out.println("Node Depth: " + tree.depth(30));
+
+        System.out.println("Tree Level: " + tree.level(30));
+
+        System.out.println("Diamter: " + tree.diameter());
+
+        System.out.println("Common Ancestor: " + tree.lowestCommonAncestorBinaryTree(10, 40));
     }
 
     private static void checkFib() {
