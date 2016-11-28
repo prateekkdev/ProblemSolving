@@ -16,49 +16,6 @@ import java.util.Scanner;
  */
 public class Problems {
 
-    // Merge two sorted arrays
-    // Complexity is O(m+n)
-    public static int[] mergeTwoSortedArrays(int[] arr1, int[] arr2) {
-
-        int[] arrResult = new int[arr1.length + arr2.length];
-
-        int counter1 = 0;
-        int counter2 = 0;
-        int counterResult = 0;
-
-        while (counter1 != arr1.length && counter2 != arr2.length) {
-            if (arr1[counter1] <= arr2[counter2]) {
-                arrResult[counterResult++] = arr1[counter1];
-                counter1++;
-            } else {
-                arrResult[counterResult++] = arr2[counter2];
-                counter2++;
-            }
-        }
-
-        while (counter1 < arr1.length) {
-            arrResult[counterResult++] = arr1[counter1];
-            counter1++;
-        }
-
-        while (counter2 < arr2.length) {
-            arrResult[counterResult++] = arr2[counter2];
-            counter2++;
-        }
-
-        return arrResult;
-    }
-
-    // Merge K sorted Arrays
-    /*
-    public static int[] mergeKSortedArrays(int[]...) {
-
-        
-        
-        return null;
-    }
-    */
-
     public static void countIntegers() {
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
