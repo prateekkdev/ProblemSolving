@@ -162,6 +162,66 @@ public class PLinkedList {
         }
     }
 
+    public void reverseListPrint() {
+        reverseListPrint(head);
+    }
+
+    public void reverseListPrint(Node node) {
+        if (node == null) {
+            return;
+        }
+        reverseListPrint(node.next);
+
+        if (!node.equals(head)) {
+            System.out.print(node.data + ", ");
+        }
+    }
+
+    /**
+     * This has time complexity O(n), but Space complexity O(1)
+     */
+    public void reverseList() {
+
+        Node currNode = head.next;
+        Node previousNode = null;
+
+        while (currNode != null) {
+            Node temp = currNode.next;
+            currNode.next = previousNode;
+            previousNode = currNode;
+            currNode = temp;
+        }
+        head.next = previousNode;
+    }
+
+    public void reverseListRecursive() {
+        if (head.next != null) {
+            Node node = reverseListRescursive(head.next);
+            node.next = null;
+        }
+    }
+
+    /**
+     * This has time complexity of O(n) and space complexity of O(n) as
+     * well(Because recursion would be used n no. of times, which uses stack
+     * internally).
+     */
+    public Node reverseListRescursive(Node node) {
+
+        if (node == null) {
+            return null;
+        }
+
+        Node reverseNode = reverseListRescursive(node.next);
+        if (reverseNode == null) {
+            head.next = node;
+        } else {
+            reverseNode.next = node;
+        }
+
+        return node;
+    }
+
     private class Node {
 
         private int data;

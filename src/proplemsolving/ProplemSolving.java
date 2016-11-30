@@ -16,7 +16,24 @@ public class ProplemSolving {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        checkBST();
+        checkLinkedList();
+    }
+
+    private static void checkLinkedList() {
+        type.integer.PLinkedList list = new type.integer.PLinkedList();
+        list.insert(10);
+        list.insert(20);
+        list.insert(30);
+        list.insert(40);
+        list.insert(50);
+
+        list.traverse();
+
+        // list.reverseListPrint();
+        list.reverseListRecursive();
+        
+        list.traverse();
+
     }
 
     private static void checkBST() {
