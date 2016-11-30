@@ -27,12 +27,10 @@ public class ProplemSolving {
         list.insert(40);
         list.insert(50);
 
-        list.traverse();
+        list.reverseList();
 
-        // list.reverseListPrint();
-        list.reverseListRecursive();
-        
-        list.traverse();
+        String result = list.isCycle() ? "YES" : "NO";
+        System.out.println("Is Cycle - " + result);
 
     }
 

@@ -222,6 +222,48 @@ public class PLinkedList {
         return node;
     }
 
+    /**
+     *
+     * http://www.geeksforgeeks.org/write-a-c-function-to-detect-loop-in-a-linked-list/
+     *
+     * Find Cycle in Linked List
+     *
+     * Below is Floyd’s Cycle-Finding Algorithm: Time Complexity O(n), Space
+     * Complexity O(1)
+     *
+     * Other Methods:
+     *
+     * Hashing: Time Complexity O(n) Space Complexity O(n)
+     *
+     * Storing visited Nodes by modifying linked list data structure itself Time
+     * Complexity O(n) Space Complexity O(n)
+     *
+     */
+    public boolean isCycle() {
+
+        Node slow = head.next;
+        if (slow == null) {
+            return false;
+        }
+
+        Node fast = head.next.next;
+        if (fast == null) {
+            return false;
+        }
+
+        while (!slow.equals(fast)) {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == null || fast == null || fast.next == null) {
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
     private class Node {
 
         private int data;
