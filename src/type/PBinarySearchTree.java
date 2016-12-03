@@ -98,7 +98,8 @@ public class PBinarySearchTree {
         } else if (data > root.data) {
             root.rightChild = delete(root.rightChild, data);
         } else // Found the key, so delete it
-         if (root.leftChild == null) {
+        {
+            if (root.leftChild == null) {
                 return root.rightChild;
             } else if (root.rightChild == null) {
                 return root.leftChild;
@@ -108,6 +109,7 @@ public class PBinarySearchTree {
 
                 root.rightChild = delete(root.rightChild, root.data);
             }
+        }
 
         return root;
     }
@@ -230,7 +232,7 @@ public class PBinarySearchTree {
      * O(n)
      */
     public void topView() {
-        
+
     }
 
     /**
