@@ -29,30 +29,7 @@ public class ProplemSolving {
 
     private static void checkLinkedList() {
         type.integer.PLinkedList list = new type.integer.PLinkedList();
-//        list.insert(10);
-//        list.insert(20);
-//        list.insert(30);
-//        list.insert(40);
-//        list.insert(50);
 
-        list.InsertNth(3, 1);
-         list.InsertNth(5, 2);
-         list.InsertNth(4, 3);
-         list.InsertNth(2, 4);
-         list.InsertNth(10, 2);
-
-        list.traverse();
-
-        // System.out.println("Value - " + list.fetch(2));
-
-        
-        // list.traverse();
-        /*
-        list.reverseList();
-
-        String result = list.isCycle() ? "YES" : "NO";
-        System.out.println("Is Cycle - " + result);
-         */
     }
 
     private static void checkBST() {
@@ -68,8 +45,6 @@ public class ProplemSolving {
 //        tree.insert(53);
 //        tree.insert(54);
 //        tree.insert(55);
-
-        
 
         tree.traverseInorder();
         System.out.println();

@@ -13,24 +13,34 @@ public class PLinkedList {
 
     private Node head;
 
-    public PLinkedList() {
-        // this.head = new Node();
-    }
-
     /**
      * Inserted as first node.
      *
+     * Good practice to return head, which could be utilized by caller.
+     * (Although not standard for libraries)
+     *
      * @param data
      */
-    public void insert(int data) {
-        Node newNode = new Node(data);
-        newNode.data = data;
-        newNode.next = head.next;
+    public Node insert(int data) {
+        if (head == null) {
+            head = new Node(data);
+            return head;
+        }
 
-        head.next = newNode;
+        Node newNode = new Node(data);
+        newNode.next = head.next;
+        head = newNode;
+
+        return head;
     }
 
-    public void insertLast(int data) {
+    public Node insertLast(int data) {
+
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+            return head;
+        }
 
         Node iterator = head;
 
@@ -38,89 +48,70 @@ public class PLinkedList {
             iterator = iterator.next;
         }
 
-        iterator.next = new Node(data);
+        iterator.next = newNode;
+
+        return head;
     }
 
     /**
-     * If pos not valid, insert at last
-     *
-     * @param data
-     * @param pos
+     * During insertion and deletion, always check if head is also getting
+     * affected. Then we might need to modify head value, as below for position
+     * 1 insert(Not just next).
      */
-    public void insertAt(int pos, int data) {
-        Node iterator = head;
-        int count = 1;
+    public Node insertAt(int position, int data) {
+        Node node = new Node();
+        node.data = data;
 
-        while (iterator.next != null) {
-            if (count == pos) {
-                break;
-            }
-
-            count++;
-            iterator = iterator.next;
+        if (head == null) {
+            this.head = node;
+            return head;
         }
 
-        // Two case for insert
-        // 1. Ran out of position(pos given was out of list, so insert at last)
-        // 2. Within range(We already breaked from above loop, so good to insert)
-        Node newNode = new Node(data);
-        newNode.next = iterator.next;
-        iterator.next = newNode;
-
-    }
-
-    public void deleteFirst() {
-        if (!isEmpty()) {
-            head.next = head.next.next;
+        if (position == 0) {
+            node.next = head;
+            this.head = node;
+            return head;
         }
-    }
 
-    public void deleteLast() {
+        Node current = head;
+        int index = 1;
 
-        if (head.next != null) {
-
-            Node iterator = head;
-
-            while (iterator.next.next != null) {
-
-                iterator = iterator.next;
-
-                // This modifies head
-                // DON'T EVER DO THAT
-                // iterator.next = iterator.next.next;
-            }
-
-            iterator.next = null;
+        // position - 1, because next would be the position.
+        while (current.next != null && index < position - 1) {
+            current = current.next;
+            index++;
         }
+
+        node.next = current.next;
+        current.next = node;
+
+        return head;
     }
 
-    public void delete(int data) {
+    public Node deleteAt(int position) {
+
+        if (head == null) {
+            return head;
+        }
+
+        if (position == 0) {
+            head = null;
+            return head;
+        }
+
         Node iterator = head;
 
-        while (iterator.next != null) {
-            if (iterator.next.data == data) {
-                iterator.next = iterator.next.next;
-                break;
-            }
-            iterator = iterator.next;
+        for (int index = 0; iterator.next != null && index < position - 1; index++, iterator = iterator.next);
+
+        // This check is needed, if anyone passes wront index(Index off limits)
+        if (iterator.next != null) {
+            iterator.next = iterator.next.next;
         }
+
+        return head;
     }
 
-    public void deleteAt(int pos) {
-
-        Node iterator = head;
-        int count = 1;
-        while (iterator.next != null) {
-            if (count == pos) {
-                iterator.next = iterator.next.next;
-                break;
-            }
-            count++;
-            iterator = iterator.next;
-        }
-    }
-
-    public void traverse() {
+    public void print() {
 
         Node iterator = head;
 
@@ -131,76 +122,139 @@ public class PLinkedList {
         System.out.println();
     }
 
+    public void reversePrint(Node head) {
+
+        if (head == null) {
+            return;
+        }
+        reversePrint(head.next);
+        System.out.println(head.data);
+    }
+
+    public Node deleteFirst() {
+        if (head != null) {
+            head = head.next;
+        }
+        return head;
+    }
+
+    public Node deleteLast() {
+
+        if (head == null) {
+            return null;
+        }
+
+        if (head.next == null) {
+            head = null;
+            return head;
+        }
+
+        Node iterator = head;
+
+        while (iterator.next.next != null) {
+
+            // This modifies head
+            iterator = iterator.next;
+            // DON'T EVER DO THAT - It modifies LinkedList itself,
+            // Rather than just iterating over.
+            // iterator.next = iterator.next.next;
+        }
+
+        iterator.next = null;
+
+        return head;
+    }
+
+    public Node delete(int data) {
+
+        Node iterator = head;
+
+        while (iterator.next.next != null) {
+
+            if (iterator.next.data == data) {
+                break;
+            }
+
+            iterator = iterator.next;
+        }
+
+        // Consider last node case as well, when iterator.next = data and iterator.next.next = null
+        // Else we could have wrote inside loop as well.
+        if (iterator.next.data == data) {
+            iterator.next = null;
+        }
+
+        return head;
+    }
+
     public int fetchFirst() {
 
-        if (isEmpty()) {
+        if (head == null) {
             return -1;
         } else {
-            return head.next.data;
+            return head.data;
         }
     }
 
     public int fetchLast() {
-        Node iterator = head.next;
 
-        if (iterator != null) {
-            while (iterator.next != null) {
-                iterator = iterator.next;
-            }
-
-            return iterator.data;
-        } else {
+        if (head == null) {
             return -1;
         }
+
+        Node iterator = head;
+
+        while (iterator.next != null) {
+            iterator = iterator.next;
+        }
+
+        return iterator.data;
     }
 
-    public int fetch(int k) {
+    public int fetchAt(int position) {
+
+        if (head == null) {
+            return -1;
+        }
+
+        if (position == 0) {
+            return head.data;
+        }
 
         Node iterator = head.next;
 
         int index = 1;
 
-        while (iterator != null && index < k) {
+        // Don't need to check for iterator.next
+        // As we are directly returning from inside loop
+        while (iterator != null) {
+
+            if (index == position) {
+                return iterator.data;
+            }
+
             iterator = iterator.next;
             index++;
         }
 
-        if (iterator != null && index == k) {
-            return iterator.data;
-        } else {
-            return -1;
-        }
+        return -1;
     }
 
     public boolean isEmpty() {
-        if (head.next == null) {
+        if (head == null) {
             return true;
         } else {
             return false;
         }
     }
 
-    public void reverseListPrint() {
-        reverseListPrint(head);
-    }
-
-    public void reverseListPrint(Node node) {
-        if (node == null) {
-            return;
-        }
-        reverseListPrint(node.next);
-
-        if (!node.equals(head)) {
-            System.out.print(node.data + ", ");
-        }
-    }
-
+    // ===========
     /**
      * This has time complexity O(n), but Space complexity O(1)
      */
     public void reverseList() {
 
-        Node currNode = head.next;
+        Node currNode = head;
         Node previousNode = null;
 
         while (currNode != null) {
@@ -209,14 +263,11 @@ public class PLinkedList {
             previousNode = currNode;
             currNode = temp;
         }
-        head.next = previousNode;
+        head = previousNode;
     }
 
     public void reverseListRecursive() {
-        if (head.next != null) {
-            Node node = reverseListRescursive(head.next);
-            node.next = null;
-        }
+        reverseListRescursive(head);
     }
 
     /**
@@ -232,12 +283,17 @@ public class PLinkedList {
 
         Node reverseNode = reverseListRescursive(node.next);
         if (reverseNode == null) {
-            head.next = node;
+            head = node;
         } else {
             reverseNode.next = node;
         }
 
         return node;
+    }
+
+    // Kth last element in linkedList
+    public Node kthLast() {
+        return null;
     }
 
     /**
@@ -259,12 +315,12 @@ public class PLinkedList {
      */
     public boolean isCycle() {
 
-        Node slow = head.next;
+        Node slow = head;
         if (slow == null) {
             return false;
         }
 
-        Node fast = head.next.next;
+        Node fast = head.next;
         if (fast == null) {
             return false;
         }
@@ -280,76 +336,6 @@ public class PLinkedList {
         }
 
         return true;
-    }
-
-    public Node InsertNth(int data, int position) {
-        return InsertNth(head, data, position);
-    }
-
-    /**
-     * During insertion and deletion, always check if head is also getting
-     * affected. Then we might need to modify head value, as below for position
-     * 1 insert(Not just next).
-     */
-    public Node InsertNth(Node head, int data, int position) {
-        Node node = new Node();
-        node.data = data;
-
-        if (head == null) {
-            this.head = node;
-            return node;
-        }
-
-        if (position == 0) {
-            node.next = head;
-            this.head = node;
-            return node;
-        }
-
-        Node current = head;
-        int index = 1;
-
-        // position - 1, because next would be the position.
-        while (current.next != null && index < position - 1) {
-            current = current.next;
-            index++;
-        }
-
-        node.next = current.next;
-        current.next = node;
-
-        return head;
-    }
-
-    Node Delete(Node head, int position) {
-
-        if (head == null) {
-            return head;
-        }
-
-        if (position == 0) {
-            return head.next;
-        }
-
-        Node current = head;
-
-        for (int index = 0; current.next != null && index < position - 1; index++, current = current.next);
-
-        // This check is needed, if anyone passes wront index(Index off limits)
-        if (current.next != null) {
-            current.next = current.next.next;
-        }
-
-        return head;
-    }
-
-    void ReversePrint(Node head) {
-
-        if (head == null) {
-            return;
-        }
-        ReversePrint(head.next);
-        System.out.println(head.data);
     }
 
     private class Node {
