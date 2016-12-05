@@ -14,7 +14,7 @@ public class PLinkedList {
     private Node head;
 
     public PLinkedList() {
-        this.head = new Node();
+        // this.head = new Node();
     }
 
     /**
@@ -122,7 +122,7 @@ public class PLinkedList {
 
     public void traverse() {
 
-        Node iterator = head.next;
+        Node iterator = head;
 
         while (iterator != null) {
             System.out.print(iterator.data + ", ");
@@ -148,6 +148,24 @@ public class PLinkedList {
                 iterator = iterator.next;
             }
 
+            return iterator.data;
+        } else {
+            return -1;
+        }
+    }
+
+    public int fetch(int k) {
+
+        Node iterator = head.next;
+
+        int index = 1;
+
+        while (iterator != null && index < k) {
+            iterator = iterator.next;
+            index++;
+        }
+
+        if (iterator != null && index == k) {
             return iterator.data;
         } else {
             return -1;
@@ -262,6 +280,76 @@ public class PLinkedList {
         }
 
         return true;
+    }
+
+    public Node InsertNth(int data, int position) {
+        return InsertNth(head, data, position);
+    }
+
+    /**
+     * During insertion and deletion, always check if head is also getting
+     * affected. Then we might need to modify head value, as below for position
+     * 1 insert(Not just next).
+     */
+    public Node InsertNth(Node head, int data, int position) {
+        Node node = new Node();
+        node.data = data;
+
+        if (head == null) {
+            this.head = node;
+            return node;
+        }
+
+        if (position == 0) {
+            node.next = head;
+            this.head = node;
+            return node;
+        }
+
+        Node current = head;
+        int index = 1;
+
+        // position - 1, because next would be the position.
+        while (current.next != null && index < position - 1) {
+            current = current.next;
+            index++;
+        }
+
+        node.next = current.next;
+        current.next = node;
+
+        return head;
+    }
+
+    Node Delete(Node head, int position) {
+
+        if (head == null) {
+            return head;
+        }
+
+        if (position == 0) {
+            return head.next;
+        }
+
+        Node current = head;
+
+        for (int index = 0; current.next != null && index < position - 1; index++, current = current.next);
+
+        // This check is needed, if anyone passes wront index(Index off limits)
+        if (current.next != null) {
+            current.next = current.next.next;
+        }
+
+        return head;
+    }
+
+    void ReversePrint(Node head) {
+
+        if (head == null) {
+            return;
+        }
+        ReversePrint(head.next);
+        System.out.println(head.data);
     }
 
     private class Node {

@@ -22,9 +22,9 @@ import type.generic.*;
  * of edges b/w root and node(including both).
  *
  * Height of node – The height is the number of edges on the longest downward
- * path between that node and a leaf. A leaf node will have a height of 0.
+ * path between that of node and a leaf. A leaf node will have a height of 0.
  *
- * Height of tree(Also max depth of atree) - This is height of root node, ie
+ * Height of tree(Also max depth of a tree) - This is height of root node, ie
  * longest downward path between that node and a leaf node. Height of balanced
  * tree is long(n).
  *
@@ -35,6 +35,7 @@ import type.generic.*;
  */
 public class PBinarySearchTree {
 
+    // public to access temporarily
     public Node root;
 
     public PBinarySearchTree() {
@@ -98,8 +99,7 @@ public class PBinarySearchTree {
         } else if (data > root.data) {
             root.rightChild = delete(root.rightChild, data);
         } else // Found the key, so delete it
-        {
-            if (root.leftChild == null) {
+         if (root.leftChild == null) {
                 return root.rightChild;
             } else if (root.rightChild == null) {
                 return root.leftChild;
@@ -109,7 +109,6 @@ public class PBinarySearchTree {
 
                 root.rightChild = delete(root.rightChild, root.data);
             }
-        }
 
         return root;
     }
@@ -264,7 +263,8 @@ public class PBinarySearchTree {
     }
 
     /**
-     * Complexity O(n), as visits each node once in worst case.
+     * Complexity O(n), as visits each node once in worst case. This is
+     * applicable for all binary tree(not just bst)
      *
      * @param root
      * @param data
@@ -418,14 +418,6 @@ public class PBinarySearchTree {
         return 0;
     }
 
-    public int treeDepth() {
-        if (root == null) {
-            return -1;
-        } else {
-            return height(root);
-        }
-    }
-
     /**
      * Complexity is O(n), because each node is visited once.
      *
@@ -446,6 +438,85 @@ public class PBinarySearchTree {
             return 0;
         }
         return 1 + Math.max(height(root.leftChild), height(root.rightChild));
+    }
+
+    /**
+     * This is only applicable for Binary Trees and not Binary Search trees. As
+     * BST would never be a sum tree. So, once creating base class of BST, ie
+     * PBinaryTree, would need to move this code over there.
+     *
+     * @param root
+     * @return
+     */
+    public boolean isSumTree() {
+        return isSumTree(root);
+    }
+
+    private boolean isSumTree(Node root) {
+
+        if (root == null || (root.leftChild == null && root.rightChild == null)) {
+            return true;
+        }
+
+        int leftSum = sum(root.leftChild);
+        int rightSum = sum(root.rightChild);
+
+        if (root.data == leftSum + rightSum && isSumTree(root.leftChild) && isSumTree(root.rightChild)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private int sum(Node root) {
+
+        if (root == null) {
+            return 0;
+        }
+
+        return sum(root.leftChild) + sum(root.rightChild);
+    }
+
+    /**
+     * Even these are only applicable for Binary Trees not BSTs.
+     */
+    public boolean areMirror(Node node1, Node node2) {
+
+        // If both empty
+        if (node1 == null && node2 == null) {
+            return true;
+        }
+
+        // If one is empty
+        if (node1 == null || node2 == null) {
+            return false;
+        }
+
+        // If both are non-empty compare them recursively. 
+        // Note that in recursive calls, 
+        // we pass left of one tree and right of other tree
+        return node1.data == node2.data
+                && areMirror(node1.leftChild, node2.rightChild)
+                && areMirror(node1.rightChild, node2.leftChild);
+
+    }
+
+    /**
+     * Left and right child are mirror images.
+     */
+    public boolean isSymmetric() {
+        return areMirror(root.leftChild, root.rightChild);
+    }
+
+    /**
+     * Level order traversal in spiral form
+     *
+     * OR Printing a Binary Tree in Zig Zag Level-Order
+     *
+     * OR Print a binary tree in Zig Zag way.
+     */
+    public void traverseSpiral() {
+
     }
 
     public class Node {

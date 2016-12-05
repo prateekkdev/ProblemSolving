@@ -9,9 +9,12 @@ package algos;
  ************* Sorting ***************
  *
  * Adaptive vs Non-Adaptive: Adaptive sort takes advantage of presortedness in
- * its account. Stable vs Unstable: Stable sort maintains the sequence of
- * similar elements. Inplace vs Not inplace: Inplace sort don't use any extra
- * space(Eg. Bubble Sort)
+ * its account.
+ *
+ * Stable vs Unstable: Stable sort maintains the sequence of similar elements.
+ *
+ * Inplace vs Not inplace: Inplace sort don't use any extra space(Eg. Bubble
+ * Sort)
  *
  * QuickSort, MergeSort, HeapSort, etc are comparison based sorting algorithms.
  * There best complexity can't be more than O(nLogn)
@@ -92,12 +95,12 @@ public class Sort {
 
     /**
      * Bubble Sort(Sinking Sort)
-     *
+     * 
      * Swapping two adjacent elements repeatedly. In first iteration we have
      * largest number at last
-     *
+     * 
      * Best Case O(n), Average Case O(n^2), Worst Case O(n^2)
-     *
+     * 
      * Could be improved a little by having highest number and lowest number
      * cycle iteratively. That is could have 2 separate loops inside each pass
      * which tracks min and max index.
@@ -267,6 +270,8 @@ public class Sort {
      * heap_sort function is O(NlogN).
      *
      * @param arr
+     * 
+     * So total complexity = O(n) + O(nlogn) = O(nlogn)
      */
     public static void ascendingHeapSort(int[] arr) {
 

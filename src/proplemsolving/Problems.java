@@ -476,6 +476,7 @@ public class Problems {
     }
 
     // HeapSelect(Could be done for smallest/largest using minHeapify)
+    // Complexity O(n+klogn)
     public static int kthSmallest(int[] arr, int k) {
         if (k > arr.length || k < 1) {
             return -1;

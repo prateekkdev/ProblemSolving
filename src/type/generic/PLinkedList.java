@@ -140,6 +140,24 @@ public class PLinkedList<T> {
         }
     }
 
+    public T fetch(int k) {
+
+        Node iterator = head.next;
+
+        int index = 1;
+
+        while (iterator != null && index < k) {
+            iterator = iterator.next;
+            index++;
+        }
+
+        if (iterator != null && index == k) {
+            return iterator.data;
+        } else {
+            return null;
+        }
+    }
+
     public T fetchLast() {
         Node iterator = head.next;
 
