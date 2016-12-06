@@ -32,7 +32,7 @@ public class PStack {
     }
 
     public void display() {
-        mLinkedList.traverse();
+        mLinkedList.print();
     }
 
     public boolean isEmpty() {

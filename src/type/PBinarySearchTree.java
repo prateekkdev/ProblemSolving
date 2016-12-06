@@ -18,8 +18,7 @@ import type.generic.*;
  * Path – a sequence of nodes and edges connecting a node with a descendant.
  *
  * Level – The level of a node is defined by 1 + the number of connections
- * between the node and the root. ie Level = Depth + 1. Or we can say total no
- * of edges b/w root and node(including both).
+ * between the node and the root. ie Level = Depth + 1.
  *
  * Height of node – The height is the number of edges on the longest downward
  * path between that of node and a leaf. A leaf node will have a height of 0.
@@ -99,7 +98,8 @@ public class PBinarySearchTree {
         } else if (data > root.data) {
             root.rightChild = delete(root.rightChild, data);
         } else // Found the key, so delete it
-         if (root.leftChild == null) {
+        {
+            if (root.leftChild == null) {
                 return root.rightChild;
             } else if (root.rightChild == null) {
                 return root.leftChild;
@@ -109,6 +109,7 @@ public class PBinarySearchTree {
 
                 root.rightChild = delete(root.rightChild, root.data);
             }
+        }
 
         return root;
     }
@@ -152,11 +153,42 @@ public class PBinarySearchTree {
     }
 
     /**
+     * This is done without using any extra storage
+     *
+     * Time Complexity is O(n^2), Space Complexity is O(1)
+     *
+     * @param root
+     */
+    void traverseLevelOrderNaive(Node root) {
+
+        int height = height(root);
+
+        for (int level = 1; level <= height; level++) {
+            printGivenLevel(root, level);
+        }
+
+    }
+
+    void printGivenLevel(Node root, int level) {
+        if (root == null) {
+            return;
+        } else if (level == 1) {
+            System.out.print(root.data + " ");
+        } else if (level > 1) {
+            printGivenLevel(root.leftChild, level - 1);
+            printGivenLevel(root.rightChild, level - 1);
+        }
+    }
+
+    /**
      * Tree Traversals
      *
      * i) BFS or Level Order(Queue could be applied), ii) DFS(Stack could be
      * used, only essential in Graphs though) - Could be preorder, inorder,
      * postorder
+     *
+     * traverseLevelOrder - This is done using queue Time Complexity O(n) Space
+     * Complexity O(n)
      */
     public void traverseLevelorder() {
         PQueue queue = new PQueue();
@@ -231,6 +263,38 @@ public class PBinarySearchTree {
      * O(n)
      */
     public void topView() {
+
+    }
+
+    /**
+     * Basic topView, only leftmost child and rightmost child covered. Solved
+     * here: https://www.hackerrank.com/challenges/tree-top-view
+     *
+     * @param root
+     */
+    void top_view(Node root) {
+        if (root == null) {
+            return;
+        }
+
+        top_view(root.leftChild, true);
+        System.out.print(root.data + " ");
+        top_view(root.rightChild, false);
+    }
+
+    void top_view(Node root, boolean isLeftChild) {
+
+        if (root == null) {
+            return;
+        }
+
+        if (isLeftChild) {
+            top_view(root.leftChild, isLeftChild);
+            System.out.print(root.data + " ");
+        } else {
+            System.out.print(root.data + " ");
+            top_view(root.rightChild, isLeftChild);
+        }
 
     }
 

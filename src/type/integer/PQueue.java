@@ -32,7 +32,7 @@ public class PQueue {
     }
 
     public void display() {
-        mLinkedList.traverse();
+        mLinkedList.print();
     }
 
     public boolean isEmpty() {
