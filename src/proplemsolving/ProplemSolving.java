@@ -1,6 +1,8 @@
 package proplemsolving;
 
+import algos.Sort;
 import type.PBinarySearchTree;
+import type.integer.PLinkedList;
 
 /**
  *
@@ -12,7 +14,22 @@ public class ProplemSolving {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        checkLinkedList();
+        checkSort();
+    }
+
+    public static void checkSort() {
+        int[] arr = new int[]{2, 1, 3, 1, 2};
+        int count = Sort.splitAndMergeInversionCount(arr, 0, arr.length - 1);
+        Sort.displayArr(arr);
+        System.out.println(count);
+    }
+
+    public static void checkArr() {
+        int[] arr = new int[]{1, 2, 3, 4, 5, 6};
+        // Problems.rotateRight(arr, 2);
+        Problems.printArray(arr);
+        Problems.reverseArray(arr, 3, 5);
+        Problems.printArray(arr);
     }
 
     private static void checkMedian() {
@@ -28,7 +45,19 @@ public class ProplemSolving {
     }
 
     private static void checkLinkedList() {
-        type.integer.PLinkedList list = new type.integer.PLinkedList();
+
+        PLinkedList list = new PLinkedList();
+        list.insert(10);
+        list.insert(20);
+        list.insert(30);
+        list.insert(40);
+        // list.insert(50);
+
+        list.print();
+
+        list.reverseList();
+
+        list.print();
 
     }
 

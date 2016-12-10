@@ -28,7 +28,7 @@ public class PLinkedList {
         }
 
         Node newNode = new Node(data);
-        newNode.next = head.next;
+        newNode.next = head;
         head = newNode;
 
         return head;
@@ -253,17 +253,28 @@ public class PLinkedList {
      * This has time complexity O(n), but Space complexity O(1)
      */
     public void reverseList() {
+        head = reverseList(head);
+    }
 
-        Node currNode = head;
-        Node previousNode = null;
+    public Node reverseList(Node head) {
 
-        while (currNode != null) {
-            Node temp = currNode.next;
-            currNode.next = previousNode;
-            previousNode = currNode;
-            currNode = temp;
+        if (head == null) {
+            return null;
         }
-        head = previousNode;
+
+        Node current = head;
+        Node previous = null;
+
+        while (current != null) {
+            Node temp = current.next;
+            current.next = previous;
+            previous = current;
+            current = temp;
+        }
+
+        this.head = previous;
+
+        return this.head;
     }
 
     public void reverseListRecursive() {
@@ -338,6 +349,287 @@ public class PLinkedList {
         return true;
     }
 
+    public boolean hasCycle(Node head) {
+
+        // head.next is checked for first value of fast, below
+        if (head == null || head.next == null) {
+            return false;
+        }
+
+        Node slow = head;
+        Node fast = head.next.next;
+
+        while (true) {
+            if (slow == null) {
+                return false;
+            } else if (fast == null) {
+                return false;
+            } else if (fast.next == null) {
+                return false;
+            }
+
+            // Compare objets, as then would be same a some point for cycle.
+            if (slow.equals(fast)) {
+                return true;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+    }
+
+    public static void mergeLists(PLinkedList A, PLinkedList B) {
+        mergeLists(A.head, B.head);
+    }
+
+    /**
+     * Time Complexity: O(n) Space Complexity: O(1)
+     *
+     * Could do with less code using another linkedList, but that would have
+     * required O(n) space.
+     *
+     * We are merging B into A, would consider headA for mergedHead initially,
+     * if need be would change it to point to headB.
+     */
+    public static Node mergeLists(Node headA, Node headB) {
+
+        // So, when both are null, null would be returned.
+        if (headA == null) {
+            return headB;
+        } else if (headB == null) {
+            return headA;
+        }
+
+        // We will consider headA, if found to be larger than headB, then change.
+        Node mergedHead = headA;
+
+        Node currentA = headA;
+        Node currentB = headB;
+        Node mergedNode = null;
+
+        while (currentA != null && currentB != null) {
+
+            if (currentA.data <= currentB.data) {
+                mergedNode = currentA;
+                currentA = currentA.next;
+            } else {
+                Node tempB = currentB.next;
+                currentB.next = currentA;
+
+                // This means first node of B is larger, need to change head
+                if (mergedNode == null) {
+                    mergedHead = currentB;
+                } else {
+                    mergedNode.next = currentB;
+                }
+
+                currentB = tempB;
+            }
+        }
+
+        if (currentA == null) {
+            mergedNode.next = currentB;
+        }
+
+        if (currentB == null) {
+            // No need to do anything, we are merging to A.
+        }
+
+        return mergedHead;
+    }
+
+    /**
+     * First initialize index for k with -k, then when current reaches null, k
+     * reaches kth node. Other similar solutions in
+     * http://www.geeksforgeeks.org/nth-node-from-the-end-of-a-linked-list/
+     *
+     *
+     * Alternative implementation could be first iterate the whole linked list
+     * to find length, then reiterate for kth node.
+     *
+     * Alternative implementation could also be recursive, inwhich last
+     * node(null) returns 0 then we add 1 on every return, till it becomes k
+     * when we stop and print the data. If we want to return the value, then
+     * could use some other datatype to return kth Node after kth node being
+     * found.
+     *
+     * Complexity is O(n)
+     *
+     * @param k
+     * @return
+     */
+    public int getKthLast(int k) {
+        if (head == null) {
+            return -1;
+        }
+
+        Node current = head;
+        Node kthLast = null;
+
+        int index = -1 * k;
+
+        while (current != null) {
+            if (index == 0) {
+                kthLast = head;
+            } else if (index > 0) {
+                kthLast = kthLast.next;
+            }
+            current = current.next;
+            index++;
+        }
+
+        if (index >= 0) {
+            return kthLast.data;
+        }
+
+        // Means k is more than length of list
+        return -1;
+    }
+
+    /**
+     * Complexity O(n)
+     */
+    public Node removeDuplicates(Node head) {
+        Node current = head;
+        Node previous = null;
+
+        while (current != null) {
+            if (previous != null && previous.data == current.data) {
+                previous.next = current.next;
+                // No need to set previous = current for this, as we are deleting current.
+                // So only change previous.next and skip current(to delete that)
+            } else {
+                previous = current;
+            }
+            current = current.next;
+        }
+        return head;
+    }
+
+    /**
+     * Here we are first finding length of A and B, and then starting with the
+     * same place using length diff and comparing * * nodes. So, when nodes are
+     * equal, gives our mergepoint.
+     *
+     * TODO Need to solve this recursively as well. Would be helpful in
+     * understanding concepts.
+     *
+     * Complexity O(n)
+     */
+    int FindMergeNode(Node headA, Node headB) {
+
+        int lengthA = 0;
+        int lengthB = 0;
+
+        Node iteratorA = headA;
+        Node iteratorB = headB;
+        while (iteratorA != null) {
+            iteratorA = iteratorA.next;
+            lengthA++;
+        }
+
+        while (iteratorB != null) {
+            iteratorB = iteratorB.next;
+            lengthB++;
+        }
+
+        iteratorA = headA;
+        iteratorB = headB;
+
+        int diff = lengthA - lengthB;
+
+        // A has greater length than B
+        if (diff > 0) {
+            while (diff > 0) {
+                iteratorA = iteratorA.next;
+                diff--;
+            }
+        } else if (diff < 0) { // B has greater length than A
+            while (diff < 0) {
+                iteratorB = iteratorB.next;
+                diff++;
+            }
+        }
+
+        while (!iteratorA.equals(iteratorB)) {
+            iteratorA = iteratorA.next;
+            iteratorB = iteratorB.next;
+        }
+
+        // We are assuming this as is enforced by question itself.
+        // iteratorA.data == iteratorB.data, then only code will reach here
+        return iteratorA.data;
+
+        /*
+    if(headA.next == null && headB.next == null) {
+        return Integer.MIN_VALUE;
+    }
+    
+    
+    
+    if(headA.equals(headB)) {
+        return headA.data;
+    }
+    
+    return FindMergeNode(headA.next, headB.next);
+         */
+    }
+
+    // TODO For Doubly linked list - Need to create one
+    /*
+    Node SortedInsert(Node head,int data) {
+    
+    Node node = new Node();
+    node.data = data;
+    node.prev = null;
+    node.next = null;
+    
+    if(head == null) {
+        return node;
+    }
+    
+    Node current = head;
+    
+    while(current.next != null) {
+        if(data > current.data && data <= current.next.data) {
+            break;
+        }
+        current = current.next;
+    }
+    
+    node.prev = current;
+    node.next = current.next;
+    current.next = node;
+    
+    return head;
+    }
+     */
+    // Doubly linked list reverse
+    /*
+    Node Reverse(Node head) {
+    
+    
+    if(head == null) {
+        return head;
+    }
+    
+    Node current = head;
+    Node temp = null;
+    while(current != null) {
+        temp = current.prev;
+        current.prev = current.next;
+        current.next = temp;
+        current = current.prev; // current.prev.next is still pointing to next node(Which we need to traverse)
+    }
+        
+    // For single node cases(Even earlier head null check isn't required)
+    if(prev != null) {
+        head = temp.prev; // As already reversed, so temp.prev would have last element  
+    }
+
+    return head;
+}
+    
+     */
     private class Node {
 
         private int data;

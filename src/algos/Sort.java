@@ -95,12 +95,12 @@ public class Sort {
 
     /**
      * Bubble Sort(Sinking Sort)
-     * 
+     *
      * Swapping two adjacent elements repeatedly. In first iteration we have
      * largest number at last
-     * 
+     *
      * Best Case O(n), Average Case O(n^2), Worst Case O(n^2)
-     * 
+     *
      * Could be improved a little by having highest number and lowest number
      * cycle iteratively. That is could have 2 separate loops inside each pass
      * which tracks min and max index.
@@ -270,7 +270,7 @@ public class Sort {
      * heap_sort function is O(NlogN).
      *
      * @param arr
-     * 
+     *
      * So total complexity = O(n) + O(nlogn) = O(nlogn)
      */
     public static void ascendingHeapSort(int[] arr) {
@@ -437,6 +437,141 @@ public class Sort {
                 arr[originalCount++] = index + low;
             }
         }
+    }
+
+    /**
+     * Inversion Count for an array indicates – how far (or close) the array is
+     * from being sorted. If array is already sorted then inversion count is 0.
+     * If array is sorted in reverse order that inversion count is the maximum.
+     *
+     * @param arr
+     * @return
+     */
+    /**
+     * Selection sort based
+     *
+     * For each element, count number of elements which are on right side of it
+     * and are smaller than it.
+     *
+     * Complexity: O(n^2)
+     *
+     * @param arr
+     * @return
+     */
+    public static long inversionCountSelectionSortBased(int[] arr) {
+        long count = 0;
+
+        for (int index = 0; index < arr.length; index++) {
+            for (int current = index + 1; current < arr.length; current++) {
+                if (arr[index] > arr[current]) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * This is Merge sort based approach
+     *
+     * Complexity: O(nlogn)
+     *
+     * Current implementation is not complete, breaks for large inputs, even
+     * inconsistent for some inputs. Refer
+     * http://www.geeksforgeeks.org/counting-inversions/
+     *
+     * @param arr
+     * @param left
+     * @param right
+     * @return
+     */
+    public static int splitAndMergeInversionCount(int[] arr, int left, int right) {
+
+        int count = 0;
+        if (left < right) {
+            int mid = (left + right) / 2;
+
+            // Count for left of mid(Indirectly would get from mergeInversionCount)
+            count += splitAndMergeInversionCount(arr, left, mid);
+
+            // Count for right of mid(Indirectly would get from mergeInversionCount)
+            count += splitAndMergeInversionCount(arr, mid + 1, right);
+
+            // Count for current, when both merge
+            count += mergeInversionCount(arr, left, mid, right);
+        }
+        return count;
+    }
+
+    public static int mergeInversionCount(int[] arr, int left, int mid, int right) {
+
+        int count = 0;
+        int[] leftArr = new int[mid - left + 1];
+        for (int index = 0; index < leftArr.length; index++) {
+            leftArr[index] = arr[index + left];
+        }
+
+        int[] rightArr = new int[right - mid];
+        for (int index = 0; index < rightArr.length; index++) {
+            rightArr[index] = arr[mid + index + 1];
+        }
+
+        int leftCount = 0, rightCount = 0, mainCount = left;
+        while (leftCount < leftArr.length && rightCount < rightArr.length) {
+            if (leftArr[leftCount] <= rightArr[rightCount]) {
+                arr[mainCount++] = leftArr[leftCount++];
+            } else {
+                arr[mainCount++] = rightArr[rightCount++];
+
+                // This is THE CONDITION
+                count = count + mid - leftCount + 1;
+            }
+        }
+
+        while (leftCount < leftArr.length) {
+            arr[mainCount++] = leftArr[leftCount++];
+        }
+
+        while (rightCount < rightArr.length) {
+            arr[mainCount++] = rightArr[rightCount++];
+        }
+        return count;
+    }
+
+    /**
+     * Insertion sort based
+     *
+     * Count no of shifts happening
+     *
+     * Complexity: O(n^2)
+     *
+     * @param arr
+     * @return
+     */
+    public static long inversionCountInsertionSortBased(int[] arr) {
+        long count = 0;
+
+        for (int sortedIndex = 1; sortedIndex < arr.length; sortedIndex++) {
+            int sortedElement = arr[sortedIndex];
+            int index = sortedIndex - 1;
+            for (; index >= 0; index--) {
+                if (sortedElement < arr[index]) {
+                    arr[index + 1] = arr[index];
+                    count++;
+                } else {
+                    break;
+                }
+            }
+            arr[index + 1] = sortedElement;
+        }
+        return count;
+    }
+
+    public static int inversionCount(int[] arr) {
+        int count = 0;
+
+        return count;
     }
 
     private static void printArray(int[] ar) {

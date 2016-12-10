@@ -554,4 +554,117 @@ public class Problems {
 
         return arrResult;
     }
+
+    /**
+     * Array Rotation(Left rotation)
+     */
+    /**
+     * Inplace Time Complexity: O(n) Space Complexity: O(1) This utilizes
+     * property of Modulus/GCD of rotation with length, and total of rotation
+     * jumps are made for each * number.
+     * http://www.geeksforgeeks.org/array-rotation/
+     */
+    public static void rotation(int[] arr, int rotation) {
+
+    }
+
+    /**
+     * Out of place, Time Complexity: O(n) Space Complexity: O(d)
+     */
+    public static void rotationOutOfPlace(int[] arr, int rotation) {
+
+        int[] arrTemp = new int[arr.length];
+        for (int index = 0; index < arr.length; index++) {
+            arrTemp[index] = arr[index];
+        }
+
+        int rIndex = 0;
+        for (int pIndex = rotation; pIndex < arr.length; pIndex++) {
+            arr[rIndex++] = arrTemp[pIndex];
+        }
+
+        for (int pIndex = 0; rIndex < arr.length; rIndex++, pIndex++) {
+            arr[rIndex] = arrTemp[pIndex];
+        }
+    }
+
+    /**
+     * Complexity is O(n^d) Better approach could be used for complexity of O(1)
+     */
+    public static void rotationNaive(int[] arr, int rotation) {
+
+        for (int count = 1; count <= rotation; count++) {
+            int first = arr[0];
+            int index = 1;
+            for (; index < arr.length; index++) {
+                arr[index - 1] = arr[index];
+            }
+            arr[index - 1] = first;
+        }
+    }
+
+    public static void printArr(int[] arr) {
+        for (int index = 0; index < arr.length; index++) {
+            System.out.print(arr[index] + " ");
+        }
+    }
+
+    // 1, 2, 3, 4, 5, 6, 7, 8
+    // For 3
+    // 
+    // _, _, 3, 1, 2, 6, 7, 5
+    // For 3
+    // 6, 7, 8, 1, 2, 3, 4, 5
+    // For 1
+    // 8, 1, 2, 3, 4, 5, 6, 7
+    // For 2
+    // 7, 8, 1, 2, 3, 4, 5, 6
+    // For 3
+    // 6, 7, 8, 1, 2, 3, 4, 5
+    /**
+     * http://www.geeksforgeeks.org/program-for-array-rotation-continued-reversal-algorithm/
+     * TODO Need to implement this for swap using jumps
+     */
+    /*
+    public static void jumpSwap(int[] arr, int jumpValue) {
+        int previous = arr[startIndex];
+        int currentIndex = jumpValue;
+    }
+     */
+    /**
+     * Complexity is O(n)
+     *
+     * @param arr
+     * @param rotation
+     */
+    public static void rotateRight(int[] arr, int rotation) {
+        // This is done, if rotation is larger than array, then take GCD/Modulus with length.
+        rotation = rotation % arr.length;
+        // printArray(arr);
+        reverseArray(arr, 0, arr.length - rotation - 1);
+        reverseArray(arr, arr.length - rotation, arr.length - 1);
+        reverseArray(arr, 0, arr.length - 1);
+        // printArray(arr);
+    }
+
+    // Array Reversal
+    public static void reverseArray(int[] arr, int start, int end) {
+        for (; start < end; start++, end--) {
+            swap1(arr, start, end);
+        }
+    }
+
+    public static void printArray(int[] arr) {
+        System.out.println();
+        for (int index = 0; index < arr.length; index++) {
+            System.out.print(arr[index] + ", ");
+        }
+        System.out.println();
+    }
+
+    public static void swap1(int[] arr, int pos1, int pos2) {
+        arr[pos1] = arr[pos1] ^ arr[pos2];
+        arr[pos2] = arr[pos1] ^ arr[pos2];
+        arr[pos1] = arr[pos1] ^ arr[pos2];
+    }
 }
