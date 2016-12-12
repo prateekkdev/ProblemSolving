@@ -3,6 +3,7 @@ package proplemsolving;
 import algos.Sort;
 import type.PBinarySearchTree;
 import type.integer.PLinkedList;
+import Problems.DynamicProgramming;
 
 /**
  *
@@ -14,7 +15,19 @@ public class ProplemSolving {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        checkSort();
+        checkFib();
+    }
+
+    // 0, 1, 1, 2, 3, 5, 8, 13, 
+    private static void checkFib() {
+
+        long beforeTime = System.currentTimeMillis();
+        System.out.println("" + DynamicProgramming.fibDynamic(19));
+
+        long afterTime = System.currentTimeMillis();
+
+        System.out.println("Total Time: " + (afterTime - beforeTime) / 1000 + " secs");
+
     }
 
     public static void checkSort() {
