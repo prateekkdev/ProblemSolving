@@ -400,11 +400,6 @@ public class Problems {
         return 0;
     }
 
-    // QuickSelect: Applications in median for unsorted array
-    public static int QuickSelect(int[] arr) {
-        return 0;
-    }
-
     // HeapSelect(Could be done for smallest/largest using minHeapify)
     // Complexity O(n+klogn)
     public static int kthSmallest(int[] arr, int k) {
