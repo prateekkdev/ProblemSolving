@@ -15,7 +15,7 @@ public class ProplemSolving {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        checkFib();
+        checkArr();
     }
 
     // 0, 1, 1, 2, 3, 5, 8, 13, 
@@ -41,7 +41,7 @@ public class ProplemSolving {
         int[] arr = new int[]{1, 2, 3, 4, 5, 6};
         // Problems.rotateRight(arr, 2);
         Problems.printArray(arr);
-        Problems.reverseArray(arr, 3, 5);
+        Problems.leftRotation(arr, 1);
         Problems.printArray(arr);
     }
 

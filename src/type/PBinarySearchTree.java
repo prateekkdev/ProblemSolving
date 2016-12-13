@@ -30,6 +30,18 @@ import type.generic.*;
  * Diameter - The diameter of a tree (sometimes called the width) is the number
  * of nodes on the longest path between two leaves in the tree.
  *
+ * Notes: Usually Duplicates shouldn't be allowed in BST, for that some other
+ * data structure should be employed. as duplicates would give issues while
+ * rotation and everything and would make operations a little while adding a
+ * little complexity since you may need to keep searching once you've found your
+ * value for other nodes of the same value. In the pragmatic sense, that means
+ * if the value is <>, you traverse the data structure in one of two
+ * 'directions'. So, in that sense, duplicate values don't make any sense at
+ * all. For more info:
+ * http://stackoverflow.com/questions/300935/are-duplicate-keys-allowed-in-the-definition-of-binary-search-trees
+ * But currently I think operations are based on allowing duplicates below.
+ *
+ *
  * @author prateek.kesarwani
  */
 public class PBinarySearchTree {
@@ -581,6 +593,59 @@ public class PBinarySearchTree {
      */
     public void traverseSpiral() {
 
+    }
+
+    /**
+     * METHOD 1 Simple method with min and max being passed along for each node
+     * recursively. Time Complexity: O(n) Space Complexity: O(1)
+     */
+    boolean isBST(Node root, int min, int max) {
+        if (root == null) {
+            return true;
+        }
+
+        if (root.data > min && root.data < max) {
+            return isBST(root.leftChild, min, root.data) && isBST(root.rightChild, root.data, max);
+        }
+
+        return false;
+    }
+
+    /**
+     * METHOD 2(Using In-Order Traversal) Do In-Order Traversal of the given
+     * tree and store the result in a temp array. Then check if the temp array
+     * is sorted in ascending order, if it is, then the tree is BST.
+     *
+     * Time Complexity: O(n)
+     *
+     * We can avoid the use of Auxiliary Array. While doing In-Order traversal,
+     * we can keep track of previously visited node. If the value of the
+     * currently visited node is less than the previous value, then tree is not
+     * BST. This is big optimization for avoiding aux array.
+     *
+     * Time Complexity: O(n) Space Complexity: O(1)
+     *
+     */
+    Node prev;
+
+    boolean isBST(Node root) {
+        if (root == null) {
+            return true;
+        }
+
+        if (!isBST(root.leftChild)) {
+            return false;
+        }
+
+        // False, if not orderered or duplicate values
+        if (prev != null && root.data <= prev.data) {
+            return false;
+        }
+
+        prev = root;
+
+        // For left, previous node is previous left and for right previous node becomes root, as inorder
+        return isBST(root.rightChild);
     }
 
     public class Node {

@@ -486,42 +486,49 @@ public class Problems {
     }
 
     /**
-     * Array Rotation(Left rotation)
+     * Array Rotations
      */
     /**
-     * Inplace Time Complexity: O(n) Space Complexity: O(1) This utilizes
-     * property of Modulus/GCD of rotation with length, and total of rotation
-     * jumps are made for each * number.
-     * http://www.geeksforgeeks.org/array-rotation/
+     * Out of place,
+     *
+     * Here first elements are copied to temp arr.
+     *
+     * Then they are copied back from rotation to length, and then from 0 to
+     * rotation
+     *
+     * Time Complexity: O(n) Space Complexity: O(d)
      */
-    public static void rotation(int[] arr, int rotation) {
+    public static void leftRotationOutOfPlace(int[] arr, int rotation) {
 
-    }
-
-    /**
-     * Out of place, Time Complexity: O(n) Space Complexity: O(d)
-     */
-    public static void rotationOutOfPlace(int[] arr, int rotation) {
+        // After full cycle, we will come back to same location
+        rotation = rotation % arr.length;
 
         int[] arrTemp = new int[arr.length];
         for (int index = 0; index < arr.length; index++) {
             arrTemp[index] = arr[index];
         }
 
-        int rIndex = 0;
-        for (int pIndex = rotation; pIndex < arr.length; pIndex++) {
-            arr[rIndex++] = arrTemp[pIndex];
+        int resultIndex = 0;
+        for (int index = rotation; index < arr.length; index++) {
+            arr[resultIndex++] = arrTemp[index];
         }
 
-        for (int pIndex = 0; rIndex < arr.length; rIndex++, pIndex++) {
-            arr[rIndex] = arrTemp[pIndex];
+        for (int index = 0; resultIndex < arr.length; resultIndex++, index++) {
+            arr[resultIndex] = arrTemp[index];
         }
     }
 
     /**
-     * Complexity is O(n^d) Better approach could be used for complexity of O(1)
+     *
+     * Here, basic one movement at a time is done for n rotation. So, complexity
+     * is O(n^d)
+     *
+     * Better approach could be used for complexity of O(n)
      */
-    public static void rotationNaive(int[] arr, int rotation) {
+    public static void leftRotationNaive(int[] arr, int rotation) {
+
+        // After full cycle, we will come back to same location
+        rotation = rotation % arr.length;
 
         for (int count = 1; count <= rotation; count++) {
             int first = arr[0];
@@ -533,34 +540,95 @@ public class Problems {
         }
     }
 
+    /**
+     * This utilizes Jumping rotation times starting from last index. And the
+     * cycle is repeated for GCD times.
+     *
+     * This is an extension of method 2. Instead of moving one by one, divide
+     * the array in different sets where number of sets is equal to GCD of n and
+     * d and move the elements within sets.
+     *
+     * How does the GCD decide the number of cycles needed to rotate the array?
+     * Because the inner loop increments in steps of d, and stops when it gets
+     * back to the starting point, i.e. a total span which is some multiple of
+     * n. That multiple is LCM(n, d). Thus the number of elements in that cycle
+     * is LCM(n, d) / d. The total number of such cycles is n / (LCM(n, d) / d),
+     * which is equal to GCD(n, d).
+     *
+     * Why is it that once we finish a cycle, we start the new cycle from the
+     * next element i.e. can't the next element be already a part of a processed
+     * cycle? No. The inner loop increments in steps of d, which is a multiple
+     * of GCD(n, d). Thus by the time we start the i-th cycle, for a hit we'd
+     * need (k*GCD + z) % n == i (for 0 <= z < i). This leads to (k*GCD) % n ==
+     * (i - z). This clearly has no solutions.
+     *
+     * Time complexity: O(n)
+     *
+     * Auxiliary Space: O(1)
+     *
+     * @param arr
+     * @param rotation
+     * @return
+     */
+    public static int[] leftRotation(int[] arr, int rotation) {
+
+        // After full cycle, we will come back to same location
+        rotation = rotation % arr.length;
+
+        int gcd = getGCD(rotation, arr.length);
+        for (int count = 0; count < gcd; count++) {
+            int prevIndex = arr.length - 1 - count;
+            int prevValue = arr[prevIndex];
+            int currIndex = getJumpIndexLeftRotation(arr, prevIndex, rotation);
+            while (currIndex != prevIndex) {
+                int currValue = arr[currIndex];
+                arr[currIndex] = prevValue;
+                prevValue = currValue;
+                currIndex = getJumpIndexLeftRotation(arr, currIndex, rotation);
+            }
+            arr[currIndex] = prevValue;
+        }
+        return arr;
+    }
+
+    /**
+     * Find greatest common divisor between rotation and size
+     *
+     * @param rotation
+     * @param size
+     * @return
+     */
+    public static int getGCD(int rotation, int size) {
+        if (size == 0) {
+            return rotation;
+        } else {
+            return getGCD(size, rotation % size);
+        }
+    }
+
+    /**
+     * Get the index for next jump. Index might be beyond 0 and cycled to back
+     * of array.
+     *
+     * @param arr
+     * @param original
+     * @param rotation
+     * @return
+     */
+    public static int getJumpIndexLeftRotation(int[] arr, int original, int rotation) {
+        if (original >= rotation) {
+            return original - rotation;
+        } else {
+            return arr.length - (rotation - original);
+        }
+    }
+
     public static void printArr(int[] arr) {
         for (int index = 0; index < arr.length; index++) {
             System.out.print(arr[index] + " ");
         }
     }
 
-    // 1, 2, 3, 4, 5, 6, 7, 8
-    // For 3
-    // 
-    // _, _, 3, 1, 2, 6, 7, 5
-    // For 3
-    // 6, 7, 8, 1, 2, 3, 4, 5
-    // For 1
-    // 8, 1, 2, 3, 4, 5, 6, 7
-    // For 2
-    // 7, 8, 1, 2, 3, 4, 5, 6
-    // For 3
-    // 6, 7, 8, 1, 2, 3, 4, 5
-    /**
-     * http://www.geeksforgeeks.org/program-for-array-rotation-continued-reversal-algorithm/
-     * TODO Need to implement this for swap using jumps
-     */
-    /*
-    public static void jumpSwap(int[] arr, int jumpValue) {
-        int previous = arr[startIndex];
-        int currentIndex = jumpValue;
-    }
-     */
     /**
      * Complexity is O(n)
      *
@@ -571,7 +639,7 @@ public class Problems {
         // This is done, if rotation is larger than array, then take GCD/Modulus with length.
         rotation = rotation % arr.length;
         // printArray(arr);
-        reverseArray(arr, 0, arr.length - rotation - 1);
+        reverseArray(arr, 0, arr.length - 1 - rotation);
         reverseArray(arr, arr.length - rotation, arr.length - 1);
         reverseArray(arr, 0, arr.length - 1);
         // printArray(arr);
