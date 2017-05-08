@@ -11,6 +11,51 @@ import static algos.Sort.swap;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
+/*
+
+/*
+    
+    // you can write to stdout for debugging purposes, e.g.
+// console.log('this is a debug message');
+
+// Returns true if and only if A can be sorted with at most one swap.
+function solution(A) {
+  for (var i = 1; i < A.length; ++i) {
+    // Look for an inverted adjacent pair.
+    if (A[i-1] <= A[i]) {
+      continue;
+    }
+    var x = A[i-1],
+        left = i-1;
+    // If x is one of a sequence of identical elements, take the leftmost.
+    while (left-1 >= 0 && A[left-1] == x) {
+      --left;
+    }
+    // Scan past the inverted pair for the earliest element no smaller than x.
+    for (++i; i < A.length; ++i) {
+      if (A[i] >= x) {
+        break;  // If we never break here, i will be equal to A.length.
+      }
+    }
+    // Let y be the element before the earliest element no smaller than x.
+    var right = i-1,
+        y = A[right];  
+    // Swap x and y.
+    A[left] = y;
+    A[right] = x;
+    // Is the array sorted now?
+    for (i = (left == 0 ? 1 : left); i < A.length; ++i) {
+      if (A[i-1] > A[i]) {
+        return false;
+      }
+    }
+    return true;  // One swap was enough to sort the array.
+  }
+  return true;  // The array is already sorted.
+}
+    
+
+ */
 /**
  * https://www.hackerrank.com/challenges/countingsort1 Given a list of integers,
  * can you count and output the number of times each value appears? Only for
@@ -332,6 +377,7 @@ public class Problems {
         // This would be length for numbers in array considered for median
         int length = end - start + 1;
 
+        // TODO This doesn't seem right, should be for event lenght: return (arr[start + length/2 - 1] + arr[start + length/2]) / 2;
         // This would be array length when start is 0 and end is arr.length
         int lastPosition = end + 1;
         if (length % 2 == 0) {
@@ -631,7 +677,7 @@ public class Problems {
      * @param rotation
      */
     public static void rotateRight(int[] arr, int rotation) {
-        // This is done, if rotation is larger than array, then take GCD/Modulus with length.
+        // This is done, if rotation is larger than array, then take modulus with length.
         rotation = rotation % arr.length;
         // printArray(arr);
         reverseArray(arr, 0, arr.length - 1 - rotation);

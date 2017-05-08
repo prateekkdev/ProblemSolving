@@ -196,10 +196,11 @@ public class Sort {
      * @param end
      *
      * Use randpartition() instead of partition() function in quicksort()
-     * function to reduce the time complexity of this algorithm. Complexity The
-     * worst case time complexity of this algorithm is O(N2), but as this is
-     * randomized algorithm, its time complexity fluctuates between O(N2) and
-     * O(NlogN) and mostly it comes out to be O(nlogn)
+     * function to reduce the time complexity of this algorithm.
+     *
+     * Complexity: The worst case time complexity of this algorithm is O(N2),
+     * but as this is randomized algorithm, its time complexity fluctuates
+     * between O(N2) and O(NlogN) and mostly it comes out to be O(nlogn)
      */
     public static void quickSort(int[] arr, int start, int end) {
 

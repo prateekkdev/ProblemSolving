@@ -278,7 +278,12 @@ public class PLinkedList {
     }
 
     public void reverseListRecursive() {
-        reverseListRescursive(head);
+        
+        // TODO Check if doing null could be avoided here
+        // This is done beause first node is returned which now becomes last node, but still points to second node. So, cyclic.
+        if(head != null) {
+            reverseListRescursive(head).next = null;
+        }
     }
 
     /**

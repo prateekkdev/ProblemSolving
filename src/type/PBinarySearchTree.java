@@ -25,7 +25,7 @@ import type.generic.*;
  *
  * Height of tree(Also max depth of a tree) - This is height of root node, ie
  * longest downward path between that node and a leaf node. Height of balanced
- * tree is long(n).
+ * tree is log(n).
  *
  * Diameter - The diameter of a tree (sometimes called the width) is the number
  * of nodes on the longest path between two leaves in the tree.
@@ -62,9 +62,9 @@ public class PBinarySearchTree {
         }
 
         if (data <= root.data) {
-            root.leftChild = insert(root.leftChild, data);
+            root.left = insert(root.left, data);
         } else {
-            root.rightChild = insert(root.rightChild, data);
+            root.right = insert(root.right, data);
         }
 
         return root;
@@ -84,17 +84,17 @@ public class PBinarySearchTree {
         }
 
         Node parent = root;
-        Node child = data <= parent.data ? parent.leftChild : parent.rightChild;
+        Node child = data <= parent.data ? parent.left : parent.right;
 
         while (child != null) {
             parent = child;
-            child = data <= parent.data ? parent.leftChild : parent.rightChild;
+            child = data <= parent.data ? parent.left : parent.right;
         }
 
         if (data <= parent.data) {
-            parent.leftChild = newNode;
+            parent.left = newNode;
         } else {
-            parent.rightChild = newNode;
+            parent.right = newNode;
         }
          */
     }
@@ -106,20 +106,20 @@ public class PBinarySearchTree {
         }
 
         if (data < root.data) {
-            root.leftChild = delete(root.leftChild, data);
+            root.left = delete(root.left, data);
         } else if (data > root.data) {
-            root.rightChild = delete(root.rightChild, data);
+            root.right = delete(root.right, data);
         } else // Found the key, so delete it
         {
-            if (root.leftChild == null) {
-                return root.rightChild;
-            } else if (root.rightChild == null) {
-                return root.leftChild;
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
             } else {
-                Node successor = minNode(root.rightChild);
+                Node successor = minNode(root.right);
                 root.data = successor.data;
 
-                root.rightChild = delete(root.rightChild, root.data);
+                root.right = delete(root.right, root.data);
             }
         }
 
@@ -131,10 +131,10 @@ public class PBinarySearchTree {
             return null;
         }
 
-        Node child = root.leftChild;
+        Node child = root.left;
         while (child != null) {
             root = child;
-            child = root.leftChild;
+            child = root.left;
         }
         return root;
     }
@@ -152,12 +152,12 @@ public class PBinarySearchTree {
 
         // Value should be in left sub tree
         if (root.data > data) {
-            return search(root.leftChild, data);
+            return search(root.left, data);
         }
 
         // Value should be in right sub tree
         if (root.data < data) {
-            return search(root.rightChild, data);
+            return search(root.right, data);
         }
 
         // Value is in root
@@ -187,8 +187,8 @@ public class PBinarySearchTree {
         } else if (level == 1) {
             System.out.print(root.data + " ");
         } else if (level > 1) {
-            printGivenLevel(root.leftChild, level - 1);
-            printGivenLevel(root.rightChild, level - 1);
+            printGivenLevel(root.left, level - 1);
+            printGivenLevel(root.right, level - 1);
         }
     }
 
@@ -212,18 +212,51 @@ public class PBinarySearchTree {
             Node node = (Node) queue.dequeue();
             System.out.print(node.data + ", ");
 
-            if (node.leftChild != null) {
-                queue.enqueue(node.leftChild);
+            if (node.left != null) {
+                queue.enqueue(node.left);
             }
 
-            if (node.rightChild != null) {
-                queue.enqueue(node.rightChild);
+            if (node.right != null) {
+                queue.enqueue(node.right);
             }
         }
     }
 
+    public void traverseInorderIterative() {
+
+    }
+
+    /**
+     * If root is null, return. Take a stack and push root. Iterate till stack
+     * isEmpty. Pop top and push top's left child in stack, then top's right
+     * child in stack and print top.
+     */
+    public void traversePreorderIterative() {
+
+        if (root == null) {
+            return;
+        }
+
+        PStack<Node> stack = new PStack<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            Node current = stack.pop();
+
+            if (current.right != null) {
+                stack.push(current.right);
+            }
+
+            if (current.left != null) {
+                stack.push(current.left);
+            }
+
+            System.out.print(current.data + ", ");
+        }
+    }
+
     public void traversePreorder() {
-        PBinarySearchTree.this.traversePreorder(root);
+        traversePreorder(root);
     }
 
     private void traversePreorder(Node node) {
@@ -232,8 +265,8 @@ public class PBinarySearchTree {
         }
 
         System.out.print(node.data + ", ");
-        PBinarySearchTree.this.traversePreorder(node.leftChild);
-        PBinarySearchTree.this.traversePreorder(node.rightChild);
+        PBinarySearchTree.this.traversePreorder(node.left);
+        PBinarySearchTree.this.traversePreorder(node.right);
     }
 
     public void traverseInorder() {
@@ -246,9 +279,9 @@ public class PBinarySearchTree {
             return;
         }
 
-        traverseInorder(node.leftChild);
+        traverseInorder(node.left);
         System.out.print(node.data + ", ");
-        traverseInorder(node.rightChild);
+        traverseInorder(node.right);
     }
 
     public void traversePostorder() {
@@ -260,8 +293,8 @@ public class PBinarySearchTree {
             return;
         }
 
-        traversePostorder(node.leftChild);
-        traversePostorder(node.rightChild);
+        traversePostorder(node.left);
+        traversePostorder(node.right);
         System.out.print(node.data + ", ");
 
     }
@@ -284,30 +317,158 @@ public class PBinarySearchTree {
      *
      * @param root
      */
-    void top_view(Node root) {
+    public void top_view(Node root) {
         if (root == null) {
             return;
         }
 
-        top_view(root.leftChild, true);
+        top_view(root.left, true);
         System.out.print(root.data + " ");
-        top_view(root.rightChild, false);
+        top_view(root.right, false);
     }
 
-    void top_view(Node root, boolean isLeftChild) {
+    public void top_view(Node root, boolean isLeftChild) {
 
         if (root == null) {
             return;
         }
 
         if (isLeftChild) {
-            top_view(root.leftChild, isLeftChild);
+            top_view(root.left, isLeftChild);
             System.out.print(root.data + " ");
         } else {
             System.out.print(root.data + " ");
-            top_view(root.rightChild, isLeftChild);
+            top_view(root.right, isLeftChild);
         }
 
+    }
+
+    /**
+     * Top View + Null elements
+     *
+     * @param root
+     * @param isLeftChild
+     * @param isChildNull
+     */
+    public void boundaryTraversal() {
+        System.out.print(root.data + ", ");
+        boundaryTraversal(root.left, true, false);
+        boundaryTraversal(root.right, false, false);
+    }
+
+    private void boundaryTraversal(Node root, boolean isLeftChild, boolean isOnlyNullPrint) {
+
+        if (root == null) {
+            return;
+        } else if (isOnlyNullPrint) {
+            if (root.left == null && root.right == null) {
+                System.out.print(root.data + ", ");
+            } else {
+                boundaryTraversal(root.left, isLeftChild, true);
+                boundaryTraversal(root.right, isLeftChild, true);
+            }
+        } else if (isLeftChild) {
+            System.out.print(root.data + ", ");
+            boundaryTraversal(root.left, isLeftChild, false);
+            boundaryTraversal(root.right, isLeftChild, true);
+        } else {
+            boundaryTraversal(root.left, isLeftChild, true);
+            boundaryTraversal(root.right, isLeftChild, false);
+            System.out.print(root.data + ", ");
+        }
+    }
+
+    public void boundaryTraversalModular() {
+        boundaryTraversalModular(root);
+    }
+
+    public void boundaryTraversalModular(Node root) {
+        boundaryTraversalLeft(root.left);
+        System.out.print(root.data + ", ");
+        boundaryTraversalLeaves(root);
+        boundaryTraversalRight(root.right);
+    }
+
+    // PreOrder, without right branch
+    private void boundaryTraversalLeft(Node root) {
+        if (root == null) {
+            return;
+        }
+
+        if (root.left == null && root.right == null) {
+            return;
+        }
+
+        System.out.print(root.data + ", ");
+        boundaryTraversalLeft(root.left);
+    }
+
+    // Inorder, for leaves only
+    private void boundaryTraversalLeaves(Node root) {
+        if (root == null) {
+            return;
+        }
+
+        boundaryTraversalLeaves(root.left);
+        if (root.left == null && root.right == null) {
+            System.out.print(root.data + ", ");
+            return;
+        }
+        boundaryTraversalLeaves(root.right);
+
+    }
+
+    // PostOrder, without left branch
+    private void boundaryTraversalRight(Node root) {
+        if (root == null) {
+            return;
+        }
+
+        if (root.left == null && root.right == null) {
+            return;
+        }
+
+        boundaryTraversalRight(root.right);
+        System.out.print(root.data + ", ");
+    }
+
+    /**
+     *
+     * http://www.geeksforgeeks.org/tree-isomorphism-problem/
+     *
+     * Two trees are called isomorphic if one of them can be obtained from other
+     * by a series of flips, i.e. by swapping left and right children of a
+     * number of nodes. Any number of nodes at any level can have their children
+     * swapped. Two empty trees are isomorphic.
+     *
+     * @param n1
+     * @param n2
+     * @return
+     */
+    boolean isIsomorphic(Node n1, Node n2) {
+        // Both roots are NULL, trees isomorphic by definition
+        if (n1 == null && n2 == null) {
+            return true;
+        }
+
+        // Exactly one of the n1 and n2 is NULL, trees not isomorphic
+        if (n1 == null || n2 == null) {
+            return false;
+        }
+
+        if (n1.data != n2.data) {
+            return false;
+        }
+
+        // There are two possible cases for n1 and n2 to be isomorphic
+        // Case 1: The subtrees rooted at these nodes have NOT been 
+        // "Flipped". 
+        // Both of these subtrees have to be isomorphic.
+        // Case 2: The subtrees rooted at these nodes have been "Flipped"
+        return (isIsomorphic(n1.left, n2.left)
+                && isIsomorphic(n1.right, n2.right))
+                || (isIsomorphic(n1.left, n2.right)
+                && isIsomorphic(n1.right, n2.left));
     }
 
     /**
@@ -318,9 +479,9 @@ public class PBinarySearchTree {
 
         // TODO Need to check if data1 and data2 are available.
         if (data1 < root.data && data2 < root.data) {
-            root = lCA(root.leftChild, data1, data2);
+            root = lCA(root.left, data1, data2);
         } else if (data1 > root.data && data2 > root.data) {
-            root = lCA(root.rightChild, data1, data2);
+            root = lCA(root.right, data1, data2);
         }
         return root;
     }
@@ -360,13 +521,13 @@ public class PBinarySearchTree {
             return list;
         }
 
-        list = findPath(root.leftChild, data);
+        list = findPath(root.left, data);
         if (list != null) {
             list.insert(root);
             return list;
         }
 
-        list = findPath(root.rightChild, data);
+        list = findPath(root.right, data);
         if (list != null) {
             list.insert(root);
             return list;
@@ -437,15 +598,15 @@ public class PBinarySearchTree {
         }
 
         int rootDiameter = 0;
-        if (root.leftChild != null) {
-            rootDiameter += height(root.leftChild) + 1;
+        if (root.left != null) {
+            rootDiameter += height(root.left) + 1;
         }
 
-        if (root.rightChild != null) {
-            rootDiameter += height(root.rightChild) + 1;
+        if (root.right != null) {
+            rootDiameter += height(root.right) + 1;
         }
 
-        int maxChildDiameter = Math.max(diameter(root.leftChild), diameter(root.rightChild));
+        int maxChildDiameter = Math.max(diameter(root.left), diameter(root.right));
 
         return Math.max(rootDiameter, maxChildDiameter);
     }
@@ -486,9 +647,9 @@ public class PBinarySearchTree {
     private int depth(Node root, int data) {
 
         if (data < root.data) {
-            return 1 + depth(root.leftChild, data);
+            return 1 + depth(root.left, data);
         } else if (data > root.data) {
-            return 1 + depth(root.rightChild, data);
+            return 1 + depth(root.right, data);
         }
 
         return 0;
@@ -510,10 +671,10 @@ public class PBinarySearchTree {
     private int height(Node root) {
 
         if (root == null
-                || (root.leftChild == null && root.rightChild == null)) {
+                || (root.left == null && root.right == null)) {
             return 0;
         }
-        return 1 + Math.max(height(root.leftChild), height(root.rightChild));
+        return 1 + Math.max(height(root.left), height(root.right));
     }
 
     /**
@@ -528,17 +689,90 @@ public class PBinarySearchTree {
         return isSumTree(root);
     }
 
-    private boolean isSumTree(Node root) {
+    /**
+     *
+     * Get the sum of nodes in left subtree and right subtree. Check if the sum
+     * calculated is equal to root’s data. Also, recursively check if the left
+     * and right subtrees are SumTrees.
+     *
+     * Time Complexity: O(n^2)
+     *
+     * @param root
+     * @return
+     */
+    private boolean isSumTreeNaive(Node root) {
 
-        if (root == null || (root.leftChild == null && root.rightChild == null)) {
+        if (root == null || (root.left == null && root.right == null)) {
             return true;
         }
 
-        int leftSum = sum(root.leftChild);
-        int rightSum = sum(root.rightChild);
+        int leftSum = sum(root.left);
+        int rightSum = sum(root.right);
 
-        if (root.data == leftSum + rightSum && isSumTree(root.leftChild) && isSumTree(root.rightChild)) {
+        if (root.data == leftSum + rightSum && isSumTree(root.left) && isSumTree(root.right)) {
             return true;
+        }
+
+        return false;
+    }
+
+    /* Utility function to check if the given node is leaf or not */
+    boolean isLeaf(Node node) {
+        if (node == null) {
+            return false;
+        }
+        if (node.left == null && node.right == null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * This utilizes sum tree property, that root.data = 2*right.data +
+     * 2*left.data
+     *
+     * Time Complexity: O(n)
+     *
+     * @param node
+     * @return
+     */
+    boolean isSumTree(Node node) {
+        int ls; // for sum of nodes in left subtree
+        int rs; // for sum of nodes in right subtree
+
+        /* If node is NULL or it's a leaf node then
+         return true */
+        if (node == null || isLeaf(node)) {
+            return true;
+        }
+
+        if (isSumTree(node.left) && isSumTree(node.right)) {
+            // Get the sum of nodes in left subtree
+            if (node.left == null) {
+                ls = 0;
+            } else if (isLeaf(node.left)) {
+                ls = node.left.data;
+            } else {
+                ls = 2 * (node.left.data);
+            }
+
+            // Get the sum of nodes in right subtree
+            if (node.right == null) {
+                rs = 0;
+            } else if (isLeaf(node.right)) {
+                rs = node.right.data;
+            } else {
+                rs = 2 * (node.right.data);
+            }
+
+            /* If root's data is equal to sum of nodes in left
+               and right subtrees then return 1 else return 0*/
+            if ((node.data == rs + ls)) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         return false;
@@ -550,7 +784,7 @@ public class PBinarySearchTree {
             return 0;
         }
 
-        return sum(root.leftChild) + sum(root.rightChild);
+        return sum(root.left) + sum(root.right);
     }
 
     /**
@@ -572,8 +806,8 @@ public class PBinarySearchTree {
         // Note that in recursive calls, 
         // we pass left of one tree and right of other tree
         return node1.data == node2.data
-                && areMirror(node1.leftChild, node2.rightChild)
-                && areMirror(node1.rightChild, node2.leftChild);
+                && areMirror(node1.left, node2.right)
+                && areMirror(node1.right, node2.left);
 
     }
 
@@ -581,7 +815,7 @@ public class PBinarySearchTree {
      * Left and right child are mirror images.
      */
     public boolean isSymmetric() {
-        return areMirror(root.leftChild, root.rightChild);
+        return areMirror(root.left, root.right);
     }
 
     /**
@@ -605,7 +839,7 @@ public class PBinarySearchTree {
         }
 
         if (root.data > min && root.data < max) {
-            return isBST(root.leftChild, min, root.data) && isBST(root.rightChild, root.data, max);
+            return isBST(root.left, min, root.data) && isBST(root.right, root.data, max);
         }
 
         return false;
@@ -633,7 +867,7 @@ public class PBinarySearchTree {
             return true;
         }
 
-        if (!isBST(root.leftChild)) {
+        if (!isBST(root.left)) {
             return false;
         }
 
@@ -645,13 +879,16 @@ public class PBinarySearchTree {
         prev = root;
 
         // For left, previous node is previous left and for right previous node becomes root, as inorder
-        return isBST(root.rightChild);
+        return isBST(root.right);
     }
 
-    public class Node {
+    /**
+     * Modifiers are public, right now for understanding.
+     */
+    public static class Node {
 
-        private Node leftChild;
-        private Node rightChild;
+        public Node left;
+        public Node right;
         private int data;
 
         public Node(int data) {
@@ -659,19 +896,19 @@ public class PBinarySearchTree {
         }
 
         public void setLeftChild(Node node) {
-            this.leftChild = node;
+            this.left = node;
         }
 
         public Node getLeftChild() {
-            return leftChild;
+            return left;
         }
 
         public void setRightChild(Node node) {
-            this.rightChild = node;
+            this.right = node;
         }
 
         public Node getRightChild() {
-            return rightChild;
+            return right;
         }
 
         @Override

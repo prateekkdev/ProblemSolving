@@ -4,6 +4,12 @@ import algos.Sort;
 import type.PBinarySearchTree;
 import type.integer.PLinkedList;
 import Problems.DynamicProgramming;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+import java.util.Stack;
 
 /**
  *
@@ -11,16 +17,529 @@ import Problems.DynamicProgramming;
  */
 public class ProplemSolving {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+    public static void findLongestParenthesicSubstring() throws Exception {
+        //Scanner
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String str = br.readLine();
 
-        int[] arr = new int[]{1, 2, 3, 4, 5, 6};
+        // Store last matched index
+        long length = str.length(), mLength = 0;
+        int last = -1;
+        if (length == 0 || length == 1) {
+            System.out.println(0);
+            return;
+        }
 
-        Sort.displayArr(arr);
+        // Storing index of '(' in stack
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < length; i++) {
+            if (str.charAt(i) == '(') {
+                stack.push(i);
+            } else if (stack.isEmpty()) {
+                // Stack empty, we found a valid combo, update last.
+                last = i;
+            } else {
+                stack.pop();
+                // Complete valid combo found.
+                if (stack.isEmpty()) {
+                    mLength = Math.max(mLength, i - last);
+                } else {
+                    mLength = Math.max(mLength, i - stack.peek());
+                }
+            }
+        }
+        System.out.println(mLength);
+    }
 
-        System.out.println("Median: " + findMedianUsingQuickSelect(arr));
+    // Working in O(n) time.
+    public static void keepIDelJ(String[] arr, int i, int j) {
+
+        int iStart = 1, jStart = 1;
+
+        for (int count = 0; count < arr.length; count++) {
+            if (iStart++ <= i) {
+
+                // Checks to print or skip comma
+                if (count == 0) {
+                    System.out.print(arr[count]);
+                } else {
+                    System.out.print("," + arr[count]);
+                }
+            } else if (jStart++ <= j) {
+                if (jStart > j) {
+                    iStart = 1;
+                    jStart = 1;
+                }
+            }
+        }
+    }
+
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String args[]) throws Exception {
+//
+//        //Scanner
+//        Scanner s = new Scanner(System.in);
+//        String str = s.next();
+//
+//        // Store last matched index
+//        int length = str.length(), mLength = 0;
+//        int last = -1;
+//        if (length == 0 || length == 1) {
+//            System.out.println(0);
+//        }
+//
+//        // Storing index of '(' in stack
+//        Stack<Integer> stack = new Stack<>();
+//        for (int i = 0; i < length; i++) {
+//            if (str.charAt(i) == '(') {
+//                stack.push(i);
+//            } else if (stack.isEmpty()) {
+//                // Stack empty, we found a valid combo, update last.
+//                last = i;
+//            } else {
+//                stack.pop();
+//                // Complete valid combo found.
+//                if (stack.isEmpty()) {
+//                    mLength = Math.max(mLength, i - last);
+//                } else {
+//                    mLength = Math.max(mLength, i - stack.peek());
+//                }
+//            }
+//        }
+//        System.out.println(mLength);
+//    }
+    public static void findParen(String str) {
+
+        int count = 0;
+        for (int curr = 0; curr < str.length(); curr++) {
+
+            char c = str.charAt(curr);
+
+//            if (c =  == '(') {
+//                count++;
+//            }
+        }
+
+    }
+
+    private static int getLongestLenByStack(String s) {
+        // Store last matched index
+        int length = s.length(), mLength = 0;
+        int last = -1;
+        if (length == 0 || length == 1) {
+            return 0;
+        }
+
+        // Storing index of '(' in stack
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < length; i++) {
+            if (s.charAt(i) == '(') {
+                stack.push(i);
+            } else if (stack.isEmpty()) {
+                // Stack empty, we found a valid combo, update last.
+                last = i;
+            } else {
+                stack.pop();
+                // Complete valid combo found.
+                if (stack.isEmpty()) {
+                    mLength = Math.max(mLength, i - last);
+                } else {
+                    mLength = Math.max(mLength, i - stack.peek());
+                }
+            }
+        }
+        return mLength;
+    }
+
+    public static void playSnakeGame() {
+
+        Scanner scanner = new Scanner(System.in);
+
+        int totalTestCases = scanner.nextInt();
+
+        for (int count = 0; count < totalTestCases; count++) {
+            int N = scanner.nextInt();
+            int M = scanner.nextInt();
+
+            // We are working with 0 based.
+            int x = scanner.nextInt() - 1;
+
+            // We are working with 0 based.
+            int y = scanner.nextInt() - 1;
+            int l = scanner.nextInt();
+
+            // Could have done with String itself, but for better understanding.
+            String direction = scanner.next();
+
+            SnakeGame snakeGame = new SnakeGame(N, M, new BoardPosition(x, y), l, getDirectionFromString(direction));
+        }
+    }
+
+    // Just a utility function to get direction enum, for better understanding.
+    private static Direction[] getDirectionFromString(String direction) {
+
+        Direction[] arr = new Direction[direction.length()];
+
+        for (int index = 0; index < direction.length(); index++) {
+            char d = direction.charAt(index);
+            arr[index] = d == 'L' ? Direction.LEFT : d == 'R' ? Direction.RIGHT : d == 'U' ? Direction.UP : Direction.DOWN;
+        }
+        return arr;
+
+    }
+}
+
+enum Direction {
+    LEFT, RIGHT, UP, DOWN;
+}
+
+/**
+ *
+ * @author prateek.kesarwani
+ */
+class BoardPosition {
+
+    private int x;
+    private int y;
+
+    public BoardPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+}
+
+/**
+ *
+ * @author prateek.kesarwani
+ */
+class SnakeGame {
+
+    int boardSizeX;
+    int boardSizeY;
+    int snakeLength;
+    BoardPosition snakeHead;
+
+    Queue<BoardPosition> snakePath;
+
+    public SnakeGame(int boardSizeX, int boardSizeY, BoardPosition tail, int snakeLength, Direction[] directions) {
+        this.boardSizeX = boardSizeX;
+        this.boardSizeY = boardSizeY;
+        this.snakeLength = snakeLength;
+
+        // This snakeHead is before L - 1 steps.
+        this.snakeHead = new BoardPosition(tail.getX(), tail.getY());
+
+        snakePath = new LinkedList<>();
+
+        // Now we are adding snake path for L - 1 steps(ie length)
+        buildSnakePath(directions);
+
+        // Pass direction for last movement.
+        moveUntilCollision(directions[directions.length - 1]);
+    }
+
+    private void buildSnakePath(Direction[] directions) {
+
+        BoardPosition pos = null;
+        for (Direction direction : directions) {
+            pos = getNextPosition(direction);
+            snakePath.add(pos);
+        }
+
+        // Head becomes the front of queue(ie top position)
+        snakeHead = pos;
+    }
+
+    private BoardPosition getNextPosition(Direction direction) {
+        int x = snakeHead.getX();
+        int y = snakeHead.getY();
+
+        switch (direction) {
+            case LEFT:
+                x = x - 1;
+                break;
+            case RIGHT:
+                x = x + 1;
+                break;
+            case UP:
+                y = y + 1;
+                break;
+            case DOWN:
+                y = y - 1;
+                break;
+        }
+        return new BoardPosition(x, y);
+    }
+
+    private boolean isWallCollision(BoardPosition pos) {
+        if (pos.getX() >= 0 && pos.getY() >= 0 && pos.getX() <= boardSizeX && pos.getY() <= boardSizeY) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isSelfCollision(BoardPosition pos) {
+        if (snakePath.contains(pos)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void moveUntilCollision(Direction lastDirection) {
+
+        for (int countMoves = 0; true; countMoves++) {
+
+            BoardPosition next = getNextPosition(lastDirection);
+
+            if (isWallCollision(next)) {
+                // Print Wall
+                System.out.println("WALL " + countMoves);
+                return;
+            }
+
+            snakePath.remove();
+
+            if (isSelfCollision(next)) {
+                // Print Body
+                System.out.println("BODY " + countMoves);
+                return;
+            }
+
+            // If no collision, then move snake and continue
+            snakePath.add(next);
+        }
+    }
+
+    public static void printNumbers(String str) {
+        StringBuilder numStr = null;
+        for (int index = 0; index < str.length(); index++) {
+
+            char current = str.charAt(index);
+            if (current >= '0' && current <= '9') {
+                if (numStr == null) {
+                    numStr = new StringBuilder();
+                }
+                numStr.append(current);
+            } else if (numStr != null) {
+                System.out.println(numStr);
+                numStr = null;
+            }
+        }
+    }
+
+    public static void playSnakeGame() {
+
+        Scanner scanner = new Scanner(System.in);
+
+        int totalTestCases = scanner.nextInt();
+
+        for (int count = 0; count < totalTestCases; count++) {
+            int N = scanner.nextInt();
+            int M = scanner.nextInt();
+
+            // We are working with 0 based.
+            int x = scanner.nextInt() - 1;
+
+            // We are working with 0 based.
+            int y = scanner.nextInt() - 1;
+            int l = scanner.nextInt();
+
+            // Could have done with String itself, but for better understanding.
+            String direction = scanner.next();
+
+            SnakeGame snakeGame = new SnakeGame(N, M, new BoardPosition(x, y), l, getDirectionFromString(direction));
+        }
+    }
+
+    // Just a utility function to get direction enum, for better understanding.
+    private static Direction[] getDirectionFromString(String direction) {
+
+        Direction[] arr = new Direction[direction.length()];
+
+        for (int index = 0; index < direction.length(); index++) {
+            char d = direction.charAt(index);
+            arr[index] = d == 'L' ? Direction.LEFT : d == 'R' ? Direction.RIGHT : d == 'U' ? Direction.UP : Direction.DOWN;
+        }
+        return arr;
+    }
+
+    public static int solution(int[] A) {
+
+        // Quicksort array in O(nlogn) time
+        java.util.Arrays.sort(A);
+
+        int min = Integer.MAX_VALUE;
+        // Now find the minimum in O(n) time
+        for (int index = 0; index < A.length - 1; index++) {
+
+            int diff = Math.abs(A[index] - A[index + 1]);
+
+            if (diff < min) {
+                min = diff;
+            }
+        }
+
+        if (min == Integer.MAX_VALUE) {
+            return -2;
+        } else if (min > 100000000) {
+            return -1;
+        }
+
+        return min;
+    }
+
+    public static boolean solutionA(int[] A) {
+
+        for (int i = 1; i < A.length; i++) {
+            // Look for an inverted adjacent pair.
+            if (A[i - 1] <= A[i]) {
+                continue;
+            }
+            int x = A[i - 1],
+                    left = i - 1;
+            // If x is one of a sequence of identical elements, take the leftmost.
+            while (left - 1 >= 0 && A[left - 1] == x) {
+                --left;
+            }
+            // Scan past the inverted pair for the earliest element no smaller than x.
+            for (++i; i < A.length; ++i) {
+                if (A[i] >= x) {
+                    break;  // If we never break here, i will be equal to A.length.
+                }
+            }
+            // Let y be the element before the earliest element no smaller than x.
+            int right = i - 1,
+                    y = A[right];
+            // Swap x and y.
+            A[left] = y;
+            A[right] = x;
+            // Is the array sorted now?
+            for (i = (left == 0 ? 1 : left); i < A.length; ++i) {
+                if (A[i - 1] > A[i]) {
+                    return false;
+                }
+            }
+            return true;  // One swap was enough to sort the array.
+        }
+        return true;  // The array is already sorted.
+
+    }
+
+    public static boolean sortByOneSwap(int arr[], int n) {
+        boolean isSwapped = false;
+
+        // Travers the given array from rightmost side
+        for (int i = n - 1; i > 0; i--) {
+            // Check if arr[i] is not in order
+            if (arr[i] < arr[i - 1]) {
+                // Find the other element to be
+                // swapped with arr[i]
+                int j = i - 1;
+                while (j >= 0 && arr[i] < arr[j]) {
+                    j--;
+                }
+
+                isSwapped = true;
+
+                // Swap the pair
+                swap(i, j + 1, arr);
+                break;
+            }
+        }
+
+        // Check if making one swap sorted the whole array
+        for (int i = 1; i < n; i++) {
+            if (arr[i] < arr[i - 1]) {
+                return false;
+            }
+        }
+
+        return isSwapped;
+    }
+
+    public static void swap(int indexOriginal, int indexFinal, int[] swapArr) {
+        int original = swapArr[indexOriginal];
+        swapArr[indexOriginal] = swapArr[indexFinal];
+        swapArr[indexFinal] = original;
+    }
+
+    public static int solution1(int[] A) {
+
+        if (A.length == 0) {
+            return -1;
+        } else if (A.length == 1) {
+            return 0;
+        }
+
+        long[] arrLeft = new long[A.length];
+        arrLeft[0] = A[0];
+        for (int index = 1; index < arrLeft.length; index++) {
+            arrLeft[index] = arrLeft[index - 1] + A[index];
+        }
+
+        long[] arrRight = new long[A.length];
+        arrRight[A.length - 1] = A[A.length - 1];
+        for (int index = arrRight.length - 2; index >= 0; index--) {
+            arrRight[index] = arrRight[index + 1] + A[index];
+        }
+
+        for (int index = 0; index < arrLeft.length; index++) {
+            if (arrLeft[index] == arrRight[index]) {
+                return index;
+            }
+        }
+
+        return -1;
+    }
+
+    public static void checkForBST() {
+        PBinarySearchTree.Node node = buildBinaryTree();
+
+        PBinarySearchTree binarySearchTree = new PBinarySearchTree();
+        binarySearchTree.root = node;
+
+        // binarySearchTree.boundaryTraversalModular();
+        binarySearchTree.traverseInorder();
+        System.out.println();
+        binarySearchTree.traverseInorderIterative();
+    }
+
+    public static PBinarySearchTree.Node buildBinaryTree() {
+        PBinarySearchTree.Node node = new PBinarySearchTree.Node(5);
+        node.left = new PBinarySearchTree.Node(10);
+        node.left.left = new PBinarySearchTree.Node(40);
+        node.left.left.left = new PBinarySearchTree.Node(11);
+        node.left.right = new PBinarySearchTree.Node(25);
+        node.left.right.left = new PBinarySearchTree.Node(15);
+        node.left.right.left.right = new PBinarySearchTree.Node(39);
+
+        node.right = new PBinarySearchTree.Node(20);
+        node.right.left = new PBinarySearchTree.Node(80);
+        node.right.left.right = new PBinarySearchTree.Node(32);
+        node.right.right = new PBinarySearchTree.Node(90);
+        node.right.right.right = new PBinarySearchTree.Node(28);
+        node.right.right.right.left = new PBinarySearchTree.Node(23);
+
+        return node;
     }
 
     public static double findMedianUsingQuickSelect(int[] arr) {
@@ -95,7 +614,7 @@ public class ProplemSolving {
         return -1;
     }
 
-    public static void swap(int indexOriginal, int indexFinal, int[] swapArr) {
+    public static void swap1(int indexOriginal, int indexFinal, int[] swapArr) {
         int original = swapArr[indexOriginal];
         swapArr[indexOriginal] = swapArr[indexFinal];
         swapArr[indexFinal] = original;
@@ -164,7 +683,7 @@ public class ProplemSolving {
 
         list.print();
 
-        list.reverseList();
+        list.reverseListRecursive();
 
         list.print();
 
