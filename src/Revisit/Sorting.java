@@ -49,11 +49,11 @@ public class Sorting {
         int left = left(curr);
         int right = right(curr);
 
-        if (left <= last && arr[left] > arr[curr]) {
+        if (left <= last && arr[left] > arr[maxIndex]) {
             maxIndex = left;
         }
 
-        if (right <= last && arr[right] > arr[curr]) {
+        if (right <= last && arr[right] > arr[maxIndex]) {
             maxIndex = right;
         }
 
